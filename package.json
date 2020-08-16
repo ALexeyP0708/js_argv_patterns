@@ -1,0 +1,24 @@
+{
+  "name": "@alexeyp0708/argv_patterns",
+  "version": "1.0.0",
+  "description": "cli line compare in argv patterns",
+  "type": "module",
+  "main":"src/export.js",
+  "scripts": {
+    "test": "npx qunit-m tests/qunit/test_*.js"
+  },
+  "author": "Pakhomov Alexey <alexeyp0708@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@alexeyp0708/qunit_run_module_es6": "^1.0.1"
+  },
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/ALexeyP0708/js_argv_patterns.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ALexeyP0708/js_argv_patterns/issues"
+  },
+  "homepage": "https://github.com/ALexeyP0708/js_argv_patterns",
+  "publishConfig": { "registry": "https://npm.pkg.github.com/" }
+}
