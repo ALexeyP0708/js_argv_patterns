@@ -1,67 +1,157 @@
+# Install
+()
+# Description
+This component allows you to manage command line parameters (argv parameters).   
+To do this, create a pattern and compare parameters of incoming requests from the console with this pattern.
 
-## Введение
-Создает патерн argv параметров, 
-и в последующем с ним сравнивает argv параметры коммандной строки.
-Если по патерну не подходит, то выбрасывает ошибку.
-
+Exemple
 ```js
-let pattern= new ArgvPattern('style /set|get/ --color=/blue|green|black/');
-pattern.compare(['style','set','--color=blue']);
+// [object ArgvPattern] instanceof ArgvArray ===true
+let pattern= new ArgvPattern('style /set|get/ --color=/blue|green|black/'); 
+let result=pattern.compare(['style','set','--color=blue']);
+//or
+result=pattern.compare('style set --color=blue otherCommand --otherOption');
+/*
+result=>ArgvArray [
+	ArgvElement {
+		type:'command',
+		key:'style',
+		order:1
+		...
+	},
+	ArgvElement {
+		type:'command',
+		key:'set',
+		order:2
+		...
+	},
+	ArgvElement {
+		type:'option',
+		key:'color',
+		value:'blue'
+		...
+	},	
+]
+*/
 ```
-
-пааттерны можно задавать как и строкой так и с помощью обьектов, а также комбенированно.
+Patterns can be set both as a string and with the help of objects, as well as combined.
 ```js
 let pattern= new ArgvPattern();
 pattern
-    .set('style') // задаем 1-ю команду строкой
-    .set({ // задаем 2-ю команду обьектом 
-        type:'command',
-        key:/set|get/i, // паттерн команды - в формате регулярного выражения
-        required:false, // обязательная команда или нет // можно не указывать если false
-        errorMessage:'Вторая команда должна быть "get" или "set"', // альтернативная сообщение ошибки соответствия
-        default:'get' // указываем значение по умолчанию. 
-        // можно указать свои поля например 'description', которые будут использоваться в вашем коде.   
+    .set('style') // set the 1st command line (string)
+    .set({ // set the 2st command line (object) Must repeat the structure of the ArgvElement object
+        type:'command', // option|command  default - command
+        key:/set|get/i, // command pattern - in regular expression format
+        required:false, // default - false
+        errorMessage:'The second command must be "get" or "set"', // alternative message for matching error
+        default:'get' //specify the default value.
+        // you can specify your own fields for example 'description', which will be used in your code.
     })
-    .set('--color',{ // гибрид автоматически определяем {type:'option',key:'color'}
+    .set('--color',{ // hybrid. automatically detect {type: 'option', key: 'color'}
         shortKey:'c',
-        required:true, // обязательная опция
-        errorMessage:'Укажите в опции "--color" цвет blue|green|black', // альтернативная сообщение ошибки соответствия
-        //default:'black' // указываем значение по умолчанию.
-        value:/blue|green|black/i // паттерн значения - в формате регулярного выражения
+        required:true, 
+        errorMessage:'Set the "--color" option to blue | green | black', 
+        value:/blue|green|black/i // value pattern - in regular expression format
     });
 pattern.compare(['style','set','--color blue']);
-
 ``` 
+## classes for instances
 
+Instance ArgvArray class - intended for command line elements. Describes the command line.  Extends Array;
+```js
+	new ArgvArray('command --option=value');
+	// or
+	new ArgvArray(['command', '--option=value']);
+	// or
+	new ArgvArray('command', '--option=value');
+	// or
+	new ArgvArray([ // combining multiple sets
+				['command', '--option=value'], 
+				['command2', '--option2=value']
+	]);
+	/**
+	ArgvArray[
+		ArgvElement{...}
+		ArgvElement{...}
+		...
+	]
+	*/
+```
+Instance  ArgvPattern class - is intended to create a comparison pattern. 
+ Extends ArgvArray;  
+```js
+	new ArgvPattern ('/command[\d]/i --option=/[\w]+/i');
+	/**
+	ArgvPattern extends ArgvArray[
+		ArgvElement{...}
+		ArgvElement{...}
+		...
+	]
+	*/
+```
 
+ArgvElement - describes a command line element
 
-## структура паттернов
+```js
+new ArgvElement('command1');
+/**
+ArgvElement{
+	type:'command', // command or option . Default-command
+	key:'command1',
+	value:undefined,
+	required:false, //Default-false 
+	default:undefined,
+	errorMessage:undefined,//alternative error message for comparison.Used in ArgvPattern class.
+	order:1, //indicates command order. Added dynamically.For information only.
+	pattern:[ArgvElement] //Added dynamically. assigned to the result element when compared with the pattern
+}
+*/
 
-### команды
+```
+Other 
+Instance  ArgvObject class -  Converted ArgvArray to object. Syntactic sugar.
+```js
+let argv=new ArgvArray('command1 --option1 command2');
+argv=argv.toObject();
+/*
+	argv=>argvObject{
+		commands:[ArgvElement{...}],
+		options:{
+			option1:ArgvElement{...}
+		}
+	}
+*/
+```
+ 
+## pattern structure
 
-Команды перечисляются. Каждая команда имеет свою позицию в стеке комманд  
-Пример  
+String syntax is the same for ArgvArray constructor and for constructor ArgvPattern constructor.
+
+### commands
+
+The commands are enumerable. Each command has its own position in the commands stack.
+Example 
 ```js
     let pattern= new ArgvPattern('command1 --option  command2');
     //order 1 - `command1`  
     //order 2 - `command2`  
 ```  
-
-Команда может быть "строкой" или * или регулярным выражением:
+The command can be a "string" or " * " or a regular expression ( /expression/flags ):
+- string  
 ```js
-let pattern= new ArgvPattern('command1'); 
+let pattern= new ArgvPattern('command1 "long command"'); 
 // or
-pattern= new ArgvPattern({type:'command',key:'command1'});
-pattern.compare('command1');
+pattern= new ArgvPattern({type:'command',key:'command1'},{type:'command',key:'long command'});
+pattern.compare('command1 "long command"');
 ```
-- Если * , то на данной позиции комманды может быть любое выражение; 
+- If "*", then any expression can be at this command position;
 ```js
 let pattern= new ArgvPattern('*'); 
 // or
 pattern= new ArgvPattern({type:'command',key:'*'});
 pattern.compare('anyCommand');
 ```
-- Если регулярное выражение, то произайдет сравнение согласно регулярному выражению -`pattern.test(string)`.
+- If it is a regular expression, then the comparison will be performed according to the regular expression - `pattern.test (string)`.
 ```js
 let pattern= new ArgvPattern('/command1|command1_1/i'); 
 // or
@@ -72,10 +162,10 @@ pattern= new ArgvPattern({
 pattern.compare('command1_1');
 ```
 
-Стиль расширенного синтаксиса для команды :
-- `[! command_pattern]` - обязательная команда 
-- `[command_pattern default_command]` - значение по умолчанию если команда не указана
-- `[! command_pattern default_command]` не имеет смысла так писать так как установленно значение по умолчанию.
+Extended syntax style for command pattern:
+- `[! command_pattern]` - mandatory command
+- `[command_pattern default_command]` - default if no command is specified
+- `[! command_pattern default_command]` it makes no sense to write like this since the default value is set.
 ```js
  let pattern=new ArgvPattern('command1 [* default_command]');
  let command=pattern.compare('command1');
@@ -102,12 +192,129 @@ pattern.compare('command1_1');
  // throws error
 
 ```
-### Опции
+### options
+Option names can be long or short. If the option is specified without a value, then the option is boolean and is equal to true.
 
+```js
+	let argv=new ArgvArray('--color -abc=good');
+	/* 
+	argv=>ArgvArray [
+		ArgvElement {
+			type:'option',
+			key:'color'
+			value:true
+			...
+		},
+		ArgvElement {
+			type:'option',
+			shortKey:'a'
+			value:true
+			...
+		},
+		ArgvElement {
+			type:'option',
+			shortKey:'b'
+			value:true
+			...
+		},
+		ArgvElement {
+			type:'option',
+			shortKey:'c'
+			value:'good'
+			...
+		}
+	];
+	*/
+	
+```
 
+The option value in the pattern can be a string or * or a regular expression string ( `/expression/flags `)
+```js
+ 	let argv=new ArgvPattern('--option1=string --option2="long string" --option3=* --option4=/[\d]+/i');
+ 	/* 
+	argv=>ArgvPattern [
+		ArgvElement {
+			type:'option',
+			key:'option1'
+			value:'string'
+			...
+		},
+		ArgvElement {
+			type:'option',
+			key:'option2'
+			value:'long string'
+			...
+		},
+		ArgvElement {
+			type:'option',
+			key:'option3'
+			value:'*'
+			...
+		},
+		ArgvElement {
+			type:'option',
+			key:'option4'
+			value:/[\d]+/i 
+			...
+		}
+	];
+	*/
+```
 
+Separator for values
+```js
+let argv=new ArgvArray('--option=value');
+argv=new ArgvArray('--option:value');
+argv=new ArgvArray(['--option value']); 
+/* 
+since the parser does not know what comes after the option  
+name with a space (command or value for option ),  
+the set of parameters should be specified through  
+an array or instead of a space,  
+explicitly indicate "=" or ":"
+*/ 
+```
+How to determine on the command line that after the option name with a space comes the option value?
+```js
+	
+	let argv=new  ArgvArray('--option1 "value for option"');
+	// or
+	argv=new  ArgvArray(['--option1', 'value for option']);
+	/*
+		argv=>[
+			ArgvElement {
+				type:'option',
+				key:'option1'
+				value:true
+				...
+			},
+			ArgvElement {
+				type:'command',
+				key:'value for option'
+				...
+			},
+		];
+	*/
+```
+Answer:
+If a command line or an array of parameters is compared with a pattern, then value for option will be determined according to the settings of the pattern.
 
-Поиск элементов.
+```js
+let pattern=new ArgvPattern('--option1=*');
+let result=pattern.compare(['--option1', 'value for option']);
+	/*
+		result=>[
+			ArgvElement {
+				type:'option',
+				key:'option1'
+				value:'value for option'
+				...
+			}
+		];
+	*/
+```
+
+### Поиск элементов.
 Example
 ```js
  let pattern=new ArgvPattern('command1 --option * /command3|command3_1/i');
@@ -138,4 +345,3 @@ result=argv.searchElement({type:'option',key:/option[\d]/,shortKey:/[ab]/,value:
 result=argv.searchElement({type:'option',key:/option[\d]/,shortKey:/[ab]/,value:/^value[\d]$/},true);// [argv[3]]
 ```
 Также смотрите методы [ArgvArray.prototype.searchElement](docs/module-@alexeyp0708_argv_patterns.ArgvArray.html) 
-
