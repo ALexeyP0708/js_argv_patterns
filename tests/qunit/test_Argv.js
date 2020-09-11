@@ -375,7 +375,8 @@ QUnit.test('test methods',function(assert){
         let match=[
             new ArgvElement({
                 type:'command',
-                key:'command1'
+                key:'command1',
+                order:1
             }),
             new ArgvElement({
                 type:'option',
@@ -405,6 +406,7 @@ QUnit.test('test methods',function(assert){
             new ArgvElement({
                 type:'command',
                 key:'command2',
+                order:2
             })
         ];
         let result=Argv.parse('command1  -abc=100  --option1="brackets test" --option2 command2');
@@ -420,6 +422,7 @@ QUnit.test('test methods',function(assert){
             new ArgvElement({
                 type:'command',
                 key:'command1',
+                order:1
             }),
             new ArgvElement({
                 type:'option',
@@ -429,10 +432,12 @@ QUnit.test('test methods',function(assert){
             new ArgvElement({
                 type:'command',
                 key:'command1',
+                order:2
             }),
             new ArgvElement({
                 type:'command',
                 key:'command1',
+                order:3
             })
         ];
         let result=Argv.parse('command1  -a  command1 command1');
@@ -462,10 +467,12 @@ QUnit.test('test methods',function(assert){
                 new ArgvElement({
                 type:'command',
                 key:'command1',
+                order:1
             }),
             new ArgvElement({
                 type:'command',
                 key:'command2',
+                order:2
             })
             ],
             options:{
@@ -496,17 +503,19 @@ QUnit.test('test methods',function(assert){
                 }),
             }
         });
-        let result=Argv.elementsToObject('command1  -abc=100  --option1="brackets test" --option2 command2');
+        let result=Argv.elementsToObject(new ArgvArray('command1  -abc=100  --option1="brackets test" --option2 command2'));
         assert.deepEqual(result,match, 'Argv.elementsToObject method');
         let result2=Argv.objectToArray(result);
         let match2=(new ArgvArray()).concat([
             new ArgvElement({
                 type:'command',
                 key:'command1',
+                order:1
             }),
             new ArgvElement({
                 type:'command',
                 key:'command2',
+                order:2
             }),
             new ArgvElement({
                 type:'option',
@@ -558,6 +567,7 @@ QUnit.test('test methods',function(assert){
     {
         let match=new ArgvArray('--option -o');
         let result=Argv.compareArgvToPatterns('--option -o','command1 --option command2 -o command3');
+        result.forEach(value=>delete value.pattern);
         assert.deepEqual(result,match,'Argv.compareArgvToPatterns methods -test options (--option -o)');
     }
 
@@ -640,6 +650,7 @@ QUnit.test('test methods',function(assert){
             {
                 type:'command',
                 key:'command2',
+                order:2
             },
             {
                 type:'option',

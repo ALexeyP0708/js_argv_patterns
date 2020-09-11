@@ -1,4 +1,32 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: ArgvArray.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: ArgvArray.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
  * @module @alexeyp0708/argv_patterns
  */
 import {Argv} from './export.js';
@@ -42,7 +70,7 @@ export class ArgvArray extends Array {
                 args.splice(0,1,...args[0]);
             }
         }
-        if(args.length>1 || args.length===1 && typeof args[0]!=='number'){
+        if(args.length>1 || args.length===1 &amp;&amp; typeof args[0]!=='number'){
             try {
                 args=Argv.parse(args);
             } catch (e){
@@ -154,14 +182,14 @@ export class ArgvArray extends Array {
                 if(value.type==='command'){
                     order++;
                 }
-                if( element.type==='option' && element.type===value.type){
-                    if(value.key!==undefined && (element.key instanceof RegExp && element.key.test(value.key) || value.key===element.key) ||
-                        value.shortKey!==undefined && (element.shortKey instanceof RegExp && element.shortKey.test(value.shortKey) || value.shortKey===element.shortKey)
+                if( element.type==='option' &amp;&amp; element.type===value.type){
+                    if(value.key!==undefined &amp;&amp; (element.key instanceof RegExp &amp;&amp; element.key.test(value.key) || value.key===element.key) ||
+                        value.shortKey!==undefined &amp;&amp; (element.shortKey instanceof RegExp &amp;&amp; element.shortKey.test(value.shortKey) || value.shortKey===element.shortKey)
                     ){
                         if(![undefined,true].includes(element.value)){
                             if (
-                                element.value instanceof RegExp && element.value.test(value.value) ||
-                                value.value instanceof RegExp && element.value.toString()===value.value.toString() ||
+                                element.value instanceof RegExp &amp;&amp; element.value.test(value.value) ||
+                                value.value instanceof RegExp &amp;&amp; element.value.toString()===value.value.toString() ||
                                 element.value===value.value
                             ){
                                 result.push(this[key]);
@@ -169,17 +197,17 @@ export class ArgvArray extends Array {
                         } else {
                             result.push(this[key]);
                         }
-                        if(isFirst && result.length>0){
+                        if(isFirst &amp;&amp; result.length>0){
                             throw new Error('break;');
                         }
                     }
-                } else if( element.type==='command' &&  element.type===value.type ){
+                } else if( element.type==='command' &amp;&amp;  element.type===value.type ){
                     if(element.order !== undefined ){
                         if(element.order===order){
                             if(element.key!==undefined){
                                 if(
-                                    element.key instanceof RegExp && element.key.test(value.key) ||
-                                    value.key instanceof RegExp && element.key.toString()===value.key.toString()||
+                                    element.key instanceof RegExp &amp;&amp; element.key.test(value.key) ||
+                                    value.key instanceof RegExp &amp;&amp; element.key.toString()===value.key.toString()||
                                     element.key===value.key
                                 ){
                                     result.push(this[key]);
@@ -191,8 +219,8 @@ export class ArgvArray extends Array {
                         }
                     } else {
                         if(
-                            element.key instanceof RegExp && element.key.test(value.key) ||
-                            value.key instanceof RegExp && element.key.toString()===value.key.toString()||
+                            element.key instanceof RegExp &amp;&amp; element.key.test(value.key) ||
+                            value.key instanceof RegExp &amp;&amp; element.key.toString()===value.key.toString()||
                             element.key===value.key
                         ){
                             result.push(this[key]);
@@ -308,7 +336,7 @@ export class ArgvArray extends Array {
             element.setParams(params);
         }
         let find=Object.assign({},element);
-        if(find.type==='command' && find.order!==undefined){
+        if(find.type==='command' &amp;&amp; find.order!==undefined){
             find.key=undefined;
         } else if(find.type==='option'){
             find.value=undefined;
@@ -438,9 +466,9 @@ export class ArgvArray extends Array {
     sort(call){
         if(call===undefined){
             call=(a,b)=>{
-                if(a.type==='option' && b.type==='command'){
+                if(a.type==='option' &amp;&amp; b.type==='command'){
                     return 1;
-                } else if(a.type==='command' && b.type==='option'){
+                } else if(a.type==='command' &amp;&amp; b.type==='option'){
                     return -1;
                 } else {
                     return 0;
@@ -449,4 +477,26 @@ export class ArgvArray extends Array {
         }
         return super.sort(call);
     }
-}
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-@alexeyp0708_argv_patterns.html">@alexeyp0708/argv_patterns</a></li></ul><h3>Classes</h3><ul><li><a href="module-@alexeyp0708_argv_patterns.Argv.html">Argv</a></li><li><a href="module-@alexeyp0708_argv_patterns.ArgvArray.html">ArgvArray</a></li><li><a href="module-@alexeyp0708_argv_patterns.ArgvElement.html">ArgvElement</a></li><li><a href="module-@alexeyp0708_argv_patterns.ArgvObject.html">ArgvObject</a></li><li><a href="module-@alexeyp0708_argv_patterns.ArgvPattern.html">ArgvPattern</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.5</a> on Fri Sep 11 2020 19:02:16 GMT+0500 (Екатеринбург, стандартное время)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,4 +1,32 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Argv.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Argv.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
  * @module @alexeyp0708/argv_patterns
  * 
  */
@@ -70,7 +98,7 @@ export class Argv {
     */
     static parseElement(str){
         let result =[];
-        if(str[0]==='[' && str[str.length-1]===']'){
+        if(str[0]==='[' &amp;&amp; str[str.length-1]===']'){
             let params=new Argv.elementClass();
             let match=str.match(/^\[[\s]*([!])?[\s]*(-[\w]{1}|--[\w]+|[^'"\s]+|["'][\S\s]+?["'])(?:[\s]+(-[\w]{1}|--[\w]+)|)(?:[\s]+([^"'\s]+|["'][\S\s]+?["'])|)(?:[\s]+([^"'\s]+|["'][\S\s]+?["'])|)[\s]*\]$/);
             if(null===match){
@@ -91,9 +119,9 @@ export class Argv {
                 params.key=match[2].replace(/^[\s"']*|[\s"']*$/g,'');
                 params.key=params.key==='true'?true:(params.key==='false'?false:params.key);
             }
-            if(match[3]!==undefined && match[3].slice(0,2)==='--' && params.key===undefined){
+            if(match[3]!==undefined &amp;&amp; match[3].slice(0,2)==='--' &amp;&amp; params.key===undefined){
                 params.key=match[3].slice(2);
-            } else if(match[3]!==undefined && match[3].slice(0,2)!=='--'){
+            } else if(match[3]!==undefined &amp;&amp; match[3].slice(0,2)!=='--'){
                 params.shortKey=match[3].slice(1);
             }
             if(match[4]!==undefined){
@@ -156,11 +184,11 @@ export class Argv {
                     value=pattern;
                 }
                 if(match[1]!==undefined) {
-                    for(let key=0; key<match[1].length; key++){
+                    for(let key=0; key&lt;match[1].length; key++){
                         let element=new Argv.elementClass({
                             type:'option',
                             shortKey:match[1][key],
-                            value:key<match[1].length-1?true:value
+                            value:key&lt;match[1].length-1?true:value
                         });
                         result.push(element);
                     }
@@ -193,12 +221,12 @@ export class Argv {
         let result = new ArgvArray();
         let errors=[];
         let order=0;
-        for(let key=0;key<argv.length;key++){
+        for(let key=0;key&lt;argv.length;key++){
             let arg=argv[key];
             
         }
         
-        for (let key=0;key<argv.length;key++) {
+        for (let key=0;key&lt;argv.length;key++) {
             let arg=argv[key];
             if(arg instanceof Array){
                 argv.splice(key,1,...arg);
@@ -209,25 +237,21 @@ export class Argv {
                 try{
                     arg=this.parseElement(arg);
                     arg.forEach((value)=>{
-                        if(value.type==='command' && value.order===undefined){
+                        if(value.type==='command' &amp;&amp; value.order===undefined){
                             order++;
-                            Object.defineProperty(value,'order',{
-                                value:order
-                            });
+                            value.order=order;
                         }
-                        result.add(value);
+                        result.set(value);
                     });
                 }catch(e){
                     errors.push(e.message);
                 }
             } else {
-                if(arg.type==='command' &&  arg.order===undefined){
+                if(arg.type==='command' &amp;&amp;  arg.order===undefined){
                     order++;
-                    Object.defineProperty(arg,'order',{
-                        value:order
-                    });
+                    arg.order=order;
                 }
-                result.add(arg);
+                result.set(arg);
             }
         }
         if(errors.length>0){
@@ -245,7 +269,7 @@ export class Argv {
      */
     static elementsToArray(argv){
         let result=[];
-        if(!(argv instanceof ArgvArray) && !(argv instanceof ArgvObject)){
+        if(!(argv instanceof ArgvArray) &amp;&amp; !(argv instanceof ArgvObject)){
             throw new Error('Bad argument. Must be [object ArgvArray] or [object ArgvObject]');
         }
         if(argv instanceof ArgvObject){
@@ -292,7 +316,7 @@ export class Argv {
      * Error: Bad argument - Invalid argument  
      */
     static elementsToString(argv){
-        if(!(argv instanceof ArgvArray) && !(argv instanceof ArgvObject)){
+        if(!(argv instanceof ArgvArray) &amp;&amp; !(argv instanceof ArgvObject)){
             throw new Error('Bad argument. Must be [object ArgvArray] or [object ArgvObject]');
         }
         return this.elementsToArray(argv).join(' ');
@@ -310,7 +334,7 @@ export class Argv {
      */
     static elementsToPattern(argv){
         let result=[];
-        if(!(argv instanceof ArgvArray) && !(argv instanceof ArgvObject)){
+        if(!(argv instanceof ArgvArray) &amp;&amp; !(argv instanceof ArgvObject)){
             throw new Error('Bad argument. Must be [object ArgvArray] or [object ArgvObject]');
         }
         if(argv instanceof ArgvObject){
@@ -322,7 +346,7 @@ export class Argv {
                 if(/[\s]/.test(key)){
                     key=`"${key}"`;
                 }
-                if(param.default !== undefined || param.required !== undefined && param.required !== false){
+                if(param.default !== undefined || param.required !== undefined &amp;&amp; param.required !== false){
                     key=`[${param.required?'!':''} ${key} ${param.default?'"'+param.default+'" ':''}]`;
                 }
                 result.push(key);
@@ -332,9 +356,9 @@ export class Argv {
                     value=`"${value}"`;
                 }
                 let str;
-                if(param.key!==undefined && param.shortKey!==undefined ||
+                if(param.key!==undefined &amp;&amp; param.shortKey!==undefined ||
                     param.default !== undefined ||
-                    param.required !== undefined && param.required !== false){
+                    param.required !== undefined &amp;&amp; param.required !== false){
                     let key=param.key!==undefined?`--${param.key} `:'';
                     let shortKey=param.shortKey!==undefined?`-${param.shortKey} `:'';
                     str=`[${param.required?'!':''} ${key}${shortKey}${value} ${param.default?'"'+param.default+'" ':''}]`;
@@ -459,21 +483,21 @@ export class Argv {
         let check=false;
         let argvCommandKey=0,patternCommandKey=0;
         let errors=[];
-        for(let key=0; key<argv.length; key++){
+        for(let key=0; key&lt;argv.length; key++){
             if(argv[key].type==='command'){argvCommandKey++;}
             patternCommandKey=0;
             let param=new Argv.elementClass(argv[key]);
             check=false;
-            for(let pkey=0; pkey<patterns.length; pkey++){
+            for(let pkey=0; pkey&lt;patterns.length; pkey++){
                 if(patterns[pkey].type==='command'){patternCommandKey++;}
-                if(argvCommandKey===patternCommandKey && argv[key].type==='command' && patterns[pkey].type==='command'){
+                if(argvCommandKey===patternCommandKey &amp;&amp; argv[key].type==='command' &amp;&amp; patterns[pkey].type==='command'){
                     let pattern = patterns[pkey].key;
                     for(let prop of Object.keys(patterns[pkey])){
                         if(['type','key','shortKey','value','order'].includes(prop)){ continue;}
                         param[prop]=param[prop]??patterns[pkey][prop];
                     }
                     if(pattern instanceof RegExp ){
-                        if(typeof param.key ==='string' && pattern.test(param.key)){
+                        if(typeof param.key ==='string' &amp;&amp; pattern.test(param.key)){
                             check=true;
                             param.pattern=patterns[pkey];
                             intersect.push(param);
@@ -495,9 +519,9 @@ export class Argv {
                     break;
                 } else
                 if(
-                    argv[key].type==='option' && patterns[pkey].type==='option' &&
-                    ( argv[key].key !== undefined && argv[key].key===patterns[pkey].key ||
-                    argv[key].shortKey!==undefined && argv[key].shortKey===patterns[pkey].shortKey )
+                    argv[key].type==='option' &amp;&amp; patterns[pkey].type==='option' &amp;&amp;
+                    ( argv[key].key !== undefined &amp;&amp; argv[key].key===patterns[pkey].key ||
+                    argv[key].shortKey!==undefined &amp;&amp; argv[key].shortKey===patterns[pkey].shortKey )
                 ){
                     let pattern= patterns[pkey].value;
                     //let matchs=null;
@@ -512,7 +536,7 @@ export class Argv {
                     } else {
                         prefix='-';
                     }
-                    if(!['boolean'].includes(tp) && typeof param.value ==='boolean' && nextParam!==undefined){
+                    if(!['boolean'].includes(tp) &amp;&amp; typeof param.value ==='boolean' &amp;&amp; nextParam!==undefined){
                         param.value=nextParam.key??nextParam.shortKey;
                         shift=1;
                     }
@@ -521,7 +545,7 @@ export class Argv {
                         param[prop]=param[prop]??patterns[pkey][prop];
                     }
                     if(pattern instanceof RegExp ){
-                        if(typeof param.value ==='string' && pattern.test(param.value)){
+                        if(typeof param.value ==='string' &amp;&amp; pattern.test(param.value)){
                             check=true;
                             param.pattern=patterns[pkey];
                             intersect.push(param);
@@ -565,18 +589,18 @@ export class Argv {
         argvCommandKey=0;
         patternCommandKey=0;
         check=false;
-        for(let pkey=0; pkey<patterns.length; pkey++){
+        for(let pkey=0; pkey&lt;patterns.length; pkey++){
             if(patterns[pkey].type==='command'){patternCommandKey++;}
              argvCommandKey=0;
              check=false;
-             for(let key=0; key<intersect.length; key++){
+             for(let key=0; key&lt;intersect.length; key++){
                  if(intersect[key].type==='command'){argvCommandKey++;}
                  if(
-                     intersect[key].type==='command' && patterns[pkey].type==='command' && argvCommandKey===patternCommandKey ||
-                     intersect[key].type==='option' && patterns[pkey].type==='option' &&
+                     intersect[key].type==='command' &amp;&amp; patterns[pkey].type==='command' &amp;&amp; argvCommandKey===patternCommandKey ||
+                     intersect[key].type==='option' &amp;&amp; patterns[pkey].type==='option' &amp;&amp;
                      (
-                         patterns[pkey].key!==undefined && patterns[pkey].key === intersect[key].key ||
-                         patterns[pkey].shortKey!==undefined && patterns[pkey].shortKey === intersect[key].shortKey
+                         patterns[pkey].key!==undefined &amp;&amp; patterns[pkey].key === intersect[key].key ||
+                         patterns[pkey].shortKey!==undefined &amp;&amp; patterns[pkey].shortKey === intersect[key].shortKey
                      )
 
                  ){
@@ -642,7 +666,7 @@ Argv.elementClass=ArgvElement;
             return element;
         },
         set(v){
-            if(typeof v==='function' && ArgvElement.isPrototypeOf(v)){
+            if(typeof v==='function' &amp;&amp; ArgvElement.isPrototypeOf(v)){
                 element=v;
             } else if(v===null){
                 element=ArgvElement;
@@ -651,4 +675,26 @@ Argv.elementClass=ArgvElement;
             }
         }
     });
-}
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-@alexeyp0708_argv_patterns.html">@alexeyp0708/argv_patterns</a></li></ul><h3>Classes</h3><ul><li><a href="module-@alexeyp0708_argv_patterns.Argv.html">Argv</a></li><li><a href="module-@alexeyp0708_argv_patterns.ArgvArray.html">ArgvArray</a></li><li><a href="module-@alexeyp0708_argv_patterns.ArgvElement.html">ArgvElement</a></li><li><a href="module-@alexeyp0708_argv_patterns.ArgvObject.html">ArgvObject</a></li><li><a href="module-@alexeyp0708_argv_patterns.ArgvPattern.html">ArgvPattern</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.5</a> on Fri Sep 11 2020 19:02:16 GMT+0500 (Екатеринбург, стандартное время)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

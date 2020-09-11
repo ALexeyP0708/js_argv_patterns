@@ -6,7 +6,7 @@ QUnit.test('test methods',function(assert) {
     // ArgvObject.constructor
     {
         let match={
-            commands:[new ArgvElement('command1'),new ArgvElement('command2')],
+            commands:[new ArgvElement('command1',{order:1}),new ArgvElement('command2',{order:2})],
             options:{
                 option1:new ArgvElement('--option1=value'),
                 o:new ArgvElement('-o=v'),
@@ -22,7 +22,7 @@ QUnit.test('test methods',function(assert) {
 
     // ArgvObject.toArray
     {
-        let match = [new ArgvElement('command1'), new ArgvElement('command2'), new ArgvElement('--option1=value'), new ArgvElement('-o=v')];
+        let match = [new ArgvElement('command1',{order:1}), new ArgvElement('command2',{order:2}), new ArgvElement('--option1=value'), new ArgvElement('-o=v')];
         let result = new ArgvObject('command1 --option1=value command2 -o=v');
         assert.deepEqual(result.toArray(), match, ' ArgvObject.toArray');
     }

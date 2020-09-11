@@ -6,7 +6,7 @@ QUnit.test('test methods',function(assert) {
     // ArgvArray.constructor method
     {
         let match = [
-            new ArgvElement({type:'command',key:'command'}),
+            new ArgvElement({type:'command',key:'command',order:1}),
             new ArgvElement('--option'),
             new ArgvElement('-o=value')
         ];
@@ -16,14 +16,54 @@ QUnit.test('test methods',function(assert) {
         assert.deepEqual(result,match,'ArgvArray.constructor (arg1 type Array)');
         result = new ArgvArray('command', '--option', '-o=value');
         assert.deepEqual(result,match,'ArgvArray.constructor (args type Array)');
+        result= new ArgvArray([['command','--option'],[['command2','--option2'],['command3','--option3']]]);
+        match = [
+            new ArgvElement({type:'command',key:'command',order:1}),
+            new ArgvElement('--option'),
+            new ArgvElement({type:'command',key:'command2',order:2}),
+            new ArgvElement('--option2'),
+            new ArgvElement({type:'command',key:'command3',order:3}),
+            new ArgvElement('--option3')
+        ];
+        assert.deepEqual(result,match,'ArgvArray.constructor (args type Array[])');
     }
 
+    // ArgvArray.searchElement method
+    {
+      
+        let argv=new ArgvArray('command1','command1','command2','--option1=value1','--option2=value2','-a=value2','-b=value1');
+        assert.propEqual(argv.searchElement({order:1}), [argv[0]],' ArgvArray.searchElement method -test commands 1');
+        assert.propEqual(argv.searchElement({key:'command1'}), [argv[0],argv[1]],' ArgvArray.searchElement method - test commands 2');
+        assert.propEqual(argv.searchElement({key:'command2'},true), [argv[2]],' ArgvArray.searchElement method - test commands 3');
+        assert.propEqual(argv.searchElement({key:/command[\d]/}), [argv[0],argv[1],argv[2]],' ArgvArray.searchElement method - test commands 4');
+        assert.propEqual(argv.searchElement({key:/command[\d]/,order:2}), [argv[1]],' ArgvArray.searchElement method - test commands 5');
+        assert.propEqual(argv.searchElement({key:'command6'}), [],' ArgvArray.searchElement method - test commands 6');
+        assert.propEqual(argv.searchElement({type:'option',key:'option1'}), [argv[3]],' ArgvArray.searchElement method - test options 1');
+        assert.propEqual(argv.searchElement({type:'option',key:'option1',value:'value1'}), [argv[3]],' ArgvArray.searchElement method - test options 1');
+        assert.propEqual(argv.searchElement({type:'option',key:'option1',value:/value[\d]/}), [argv[3]],' ArgvArray.searchElement method - test options 2');
+        assert.propEqual(argv.searchElement({type:'option',key:/option[\d]/,value:/value[\d]/}), [argv[3],argv[4]],' ArgvArray.searchElement method - test options 3');
+        assert.propEqual(argv.searchElement({type:'option',shortKey:/[ab]/,value:/value[\d]/}), [argv[5],argv[6]],' ArgvArray.searchElement method - test options 4');
+        assert.propEqual(argv.searchElement({type:'option',key:/option[\d]/,shortKey:/[ab]/,value:/value[\d]/}), [argv[3],argv[4],argv[5],argv[6]],' ArgvArray.searchElement method - test options 5');
+        assert.propEqual(argv.searchElement({type:'option',key:/option[\d]/,shortKey:/[ab]/,value:/^[\d]$/}), [],' ArgvArray.searchElement method - test options 6');
+        assert.propEqual(argv.searchElement({type:'option',key:/option[\d]/,shortKey:/[ab]/,value:/^value[\d]$/},true), [argv[3]],' ArgvArray.searchElement method - test options 7');
+    }
+    
     // ArgvArray.get method
     {
         let argv=new ArgvArray('command1','--option1=value');
-
-        let match=argv.get({order:1})===argv[0] && argv.get('command1')===argv[0] && argv.get('command1',{order:1})===argv[0] && argv.get('command2')===false && argv.get('command1',{order:2})===false&&
-            argv.get('--option1')===argv[1] && argv.get('--option1="value"')===argv[1] && argv.get('--option2')===false && argv.get('--option1=val')===false ;
+        let match=argv.get({order:1})===argv[0] && 
+                    argv.get('command1')===argv[0] && 
+                    argv.get('command1',{order:1})===argv[0] &&
+                    argv.get({order:1,key:/command1/i})===argv[0] &&
+                    argv.get({typeof:'command',key:/command1/i})===argv[0] &&
+                    argv.get({typeof:'command',key:/command2/i})===false &&
+                    argv.get('command2')===false && 
+                    argv.get('command1',{order:2})===false&&
+                    argv.get('--option1')===argv[1] && 
+                    argv.get('--option1="value"')===argv[1] && 
+                    argv.get('--option1',{value:/value/i})===argv[1] && 
+                    argv.get('--option2')===false && 
+                    argv.get('--option1=val')===false ;
         assert.ok(match,' ArgvArray.get method');
     }
 
@@ -47,10 +87,12 @@ QUnit.test('test methods',function(assert) {
                 type:'command',
                 key:'new_command',
                 description:'Overwrite description for command',
+                order:1
             }),
             new ArgvElement({
                 type:'command',
                 key:'command2',
+                order:2
             }),
             new ArgvElement('[! --option ]',{description:'Hello my friend'}),
             new ArgvElement('-o value')
