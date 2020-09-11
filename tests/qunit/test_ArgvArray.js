@@ -108,7 +108,7 @@ QUnit.test('test methods',function(assert) {
             .add('command2',{order:1})
             .add('--option1=value');
         let match=[
-            new ArgvElement('command1'),
+            new ArgvElement('command1',{order:1}),
             new ArgvElement('--option1'),
 
         ];

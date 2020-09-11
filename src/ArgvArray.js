@@ -351,7 +351,7 @@ export class ArgvArray extends Array {
             find.value=undefined;
         }
         let check=this.get(find);
-        delete element.order;
+        //delete element.order;
         if(check===false){
             this.push(element);
         }

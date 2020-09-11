@@ -4,8 +4,14 @@ QUnit.module('Test Examples');
 
 QUnit.test('test methods',function(assert){
     {
-        let pattern= new ArgvPattern('style /get|set/ --color=/blue|green|black/');
-        pattern.compare(['style','get','--color=blue']);
+        let pattern= new ArgvPattern('style /set|get/ --color=/blue|green|black/');
+        let result=pattern.compare(['style','set','--color=blue']);
+        //or
+        result.forEach(value=>delete value.pattern);
+        /*assert.propEqual(result,[
+            new ArgvElement()
+        ],'exemple 1');*/
+       
     }
     {
         let pattern= new ArgvPattern();

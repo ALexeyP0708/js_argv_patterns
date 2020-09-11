@@ -193,11 +193,6 @@ export class Argv {
         let result = new ArgvArray();
         let errors=[];
         let order=0;
-        for(let key=0;key<argv.length;key++){
-            let arg=argv[key];
-            
-        }
-        
         for (let key=0;key<argv.length;key++) {
             let arg=argv[key];
             if(arg instanceof Array){
@@ -212,6 +207,7 @@ export class Argv {
                         if(value.type==='command' && value.order===undefined){
                             order++;
                             Object.defineProperty(value,'order',{
+                                enumerable:true,
                                 value:order
                             });
                         }
@@ -224,6 +220,7 @@ export class Argv {
                 if(arg.type==='command' &&  arg.order===undefined){
                     order++;
                     Object.defineProperty(arg,'order',{
+                        enumerable:true,
                         value:order
                     });
                 }
