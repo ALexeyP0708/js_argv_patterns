@@ -1,5 +1,115 @@
 # Install
 ()
+
+# Getting Started
+This component allows you to manage command line parameters (argv parameters).  
+To do this, create a pattern and compare parameters of incoming requests from the console with this pattern.
+Why another semblance of Commander.js component?
+ This is a different look at writing commanders.
+For example, let's create a helper for a certain start command that launches the specified script.
+```js
+let pattern = new ArgvPattern('/start|end/i /[\\s\\w]\\.js/i [--force -f] [--help]');  
+/*  
+	test commands for cLine variable 
+	'--help'
+	'start --help'   
+	'start --force --help'   
+	'end --force --help'   
+	'end --help'   
+	'end --force --help'  
+	'start --after --help'
+	'end --after --help' 
+	'start --after --force --help' 
+	'end --after --force --help'
+ */  
+
+let cLine='end --help'; // suppose this is a command passed to the script   
+let diff=new ArgvArray(); // the rest of the parameters will be indicated here    
+let argv=pattern.compare(cLine,diff);  
+let help=argv.get('--help');  
+let helpMessages={  
+	start:`start path/js/script -command "start" runs script.`,  
+	end:`end path/js/file - ends script execution.`,  
+	'--force':`[--force -f] - Forces the script to start or end.`,  
+};  
+if(help){  
+    let check=false;  
+	let message=[];  
+	if(argv.get('start',{order:1})){
+		message.push(helpMessages['start']);  
+		check=true;  
+	} else  
+	if(argv.get('end',{order:1})){  
+	    message.push(helpMessages['end']);  
+		check=true;  
+	}  
+	if(check===true && 
+		(
+			argv.get('--force') || 
+			argv.searchElement({type:'option',key:/[\w]+/i}).length<=1 && 
+			diff.searchElement({type:'option',key:/[\w]+/i}).length<=0
+		)
+	){
+	    message.push(helpMessages['--force']);  
+	}  
+	if(!check){  
+	    message=Object.values(helpMessages);  
+	}  
+	if(message.length>0){  
+	    console.log(message.join("\n"));  
+	}  
+} else {  
+    // code for start or end script    
+}  
+// other code    
+let extPattern = new ArgvPattern('[--after *]');  
+let extArgv=extPattern.compare(diff); //you can use the cLine variable instead of diff.    
+let extHelpMessages = {  
+	'--after':{  
+		start:`[--after=pathc/js/script] - Will execute the script after running the main script.`,  
+		end:`[--after=pathc/js/script] - Will execute the script after the main script finishes.`  
+	}  
+};  
+if(argv.get('--help')){ 
+    let message=[];  
+	let check=false;  
+	if( 
+		argv.get('start',{order:1}) && 
+		(
+			extArgv.get('--after')  ||
+			argv.searchElement({type:'option',key:/[\w]+/i}).length<=1
+			diff.searchElement({type:'option',key:/[\w]+/i}).length<=0
+		)
+	){  
+	        message.push(extHelpMessages['--after']['start']);  
+	} else 
+	if(
+	    argv.get('end',{order:1}) && 
+	    (
+		    extArgv.get('--after') ||
+		    argv.searchElement({type:'option',key:/[\w]+/i}).length<=1 &&
+			diff.searchElement({type:'option',key:/[\w]+/i}).length<=0
+		)
+	){  
+        message.push(extHelpMessages['--after']['end']);  
+	} else 
+	if(argv.searchElement({type:'option',key:/[\w]+/i}).length<=1){  
+	    message=Object.values(extHelpMessages['--after']);  
+	}  
+    if(message.length>0){ 
+	        console.log(message.join("\n"));  
+	}  
+} else {  
+    // code for start or end additional script    
+}  
+
+```
+OK. But why do we need to write a helper when it is built-in in other components  *? Well, for starters, this is an example that shows how you can work with this module. Well, in the future, you can automate and implement your own helper.
+
+```js
+
+```
+
 # Description
 This component allows you to manage command line parameters (argv parameters).   
 To do this, create a pattern and compare parameters of incoming requests from the console with this pattern.
@@ -267,8 +377,7 @@ let argv=new ArgvArray('--option=value');
 argv=new ArgvArray('--option:value');
 argv=new ArgvArray(['--option value']); 
 /* 
-since the parser does not know what comes after the option  
-name with a space (command or value for option ),  
+since the parser does not know what comes after the option name with a space (command or value for option ),  
 the set of parameters should be specified through  
 an array or instead of a space,  
 explicitly indicate "=" or ":"
