@@ -8,7 +8,7 @@ Why another semblance of Commander.js component?
  This is a different look at writing commanders.
 For example, let's create a helper for a certain start command that launches the specified script.
 ```js
-let pattern = new ArgvPattern('/start|end/i /[\\s\\w]\\.js/i [--force -f] [--help]');  
+let pattern = new ArgvPattern('/start|end/i /[\\s\\w]\\.js/i [--force -f] [--help -h]');  
 /*  
 	test commands for cLine variable 
 	'--help'
@@ -36,14 +36,17 @@ if(help){
     let check=false;  
 	let message=[];  
 	if(argv.get('start',{order:1})){
+		// добавляем описание команды "start"
 		message.push(helpMessages['start']);  
 		check=true;  
 	} else  
 	if(argv.get('end',{order:1})){  
+		// добавляем описание команды "end"
 	    message.push(helpMessages['end']);  
 		check=true;  
 	}  
-	if(check===true && 
+	// добовляем описание "--force" если   есть команда "start" или "end" и присутствует параметр '--force' или отсутствуют опции кроме '--help' 
+	if(check===true &&  
 		(
 			argv.get('--force') || 
 			argv.searchElement({type:'option',key:/[\w]+/i}).length<=1 && 
@@ -52,6 +55,7 @@ if(help){
 	){
 	    message.push(helpMessages['--force']);  
 	}  
+	// добавляем все описание если нет указанных комманд
 	if(!check){  
 	    message=Object.values(helpMessages);  
 	}  
@@ -61,7 +65,7 @@ if(help){
 } else {  
     // code for start or end script    
 }  
-// other code    
+// other code. Suppose you decided to expand the functionality by adding parameters without interfering with the main code.
 let extPattern = new ArgvPattern('[--after *]');  
 let extArgv=extPattern.compare(diff); //you can use the cLine variable instead of diff.    
 let extHelpMessages = {  
@@ -74,6 +78,7 @@ if(argv.get('--help')){
     let message=[];  
 	let check=false;  
 	if( 
+		// добовляем описание "--after" если   есть команда "start"  и присутствует параметр '--after' или отсутствуют опции кроме '--help' 
 		argv.get('start',{order:1}) && 
 		(
 			extArgv.get('--after')  ||
@@ -83,6 +88,7 @@ if(argv.get('--help')){
 	){  
 	        message.push(extHelpMessages['--after']['start']);  
 	} else 
+// добовляем описание "--after" если   есть команда "end"  и присутствует параметр '--after' или отсутствуют опции кроме '--help' 
 	if(
 	    argv.get('end',{order:1}) && 
 	    (
@@ -93,6 +99,7 @@ if(argv.get('--help')){
 	){  
         message.push(extHelpMessages['--after']['end']);  
 	} else 
+	// добовляем все описания "--after" если  отсутствуют опции кроме '--help' 
 	if(argv.searchElement({type:'option',key:/[\w]+/i}).length<=1){  
 	    message=Object.values(extHelpMessages['--after']);  
 	}  
@@ -104,7 +111,7 @@ if(argv.get('--help')){
 }  
 
 ```
-OK. But why do we need to write a helper when it is built-in in other components  *? Well, for starters, this is an example that shows how you can work with this module. Well, in the future, you can automate and implement your own helper.
+OK. But why do we need to write a helper?  For starters, this is an example that shows how you can work with this module. Helper('--help' ) is implemented in this module. Its description will be after.
 
 ```js
 
