@@ -1,4 +1,4 @@
-import {Argv,ArgvElement,ArgvObject,ArgvArray} from "../../src/export.js";
+import {Argv,ArgvElement,ArgvObject,ArgvArray,ArgvPattern} from "../../src/export.js";
 
 QUnit.module('Test Arg class');
 
@@ -568,7 +568,7 @@ QUnit.test('test methods',function(assert){
         let match=new ArgvArray('--option -o');
         let result=Argv.compareArgvToPatterns('--option -o','command1 --option command2 -o command3');
         result.forEach(value=>delete value.pattern);
-        assert.deepEqual(result,match,'Argv.compareArgvToPatterns methods -test options (--option -o)');
+        assert.deepEqual(result,match,'Argv.compareArgvToPatterns method -test options (--option -o)');
     }
 
     // Argv.compareArgvToPatterns methods -test options (--option=value -o="string value")
@@ -577,23 +577,23 @@ QUnit.test('test methods',function(assert){
 
         let result=Argv.compareArgvToPatterns('--option=value -o="string value"','command1 --option="value" command2 -o:"string value" command3');
         result.forEach(value=>delete value.pattern);
-        assert.deepEqual(result,match,'Argv.compareArgvToPatterns methods -test options (--option=value -o="string value")');
+        assert.deepEqual(result,match,'Argv.compareArgvToPatterns method -test options (--option=value -o="string value")');
 
         result=Argv.compareArgvToPatterns('--option=value -o="string value"','command1 --option:"value" command2 -o:"string value" command3');
         result.forEach(value=>delete value.pattern);
-        assert.deepEqual(result,match,'Argv.compareArgvToPatterns methods -test options (--option:value -o:"string value")');
+        assert.deepEqual(result,match,'Argv.compareArgvToPatterns method -test options (--option:value -o:"string value")');
 
         result=Argv.compareArgvToPatterns('--option=value -o="string value"','command1 --option "value" command2 -o "string value" command3');
         result.forEach(value=>delete value.pattern);
-        assert.deepEqual(result,match,'Argv.compareArgvToPatterns methods -test options (--option value -o "string value")');
+        assert.deepEqual(result,match,'Argv.compareArgvToPatterns method -test options (--option value -o "string value")');
 
         result=Argv.compareArgvToPatterns('--option=* -o=*','command1 --option "value" command2 -o "string value" command3');
         result.forEach(value=>delete value.pattern);
-        assert.deepEqual(result,match,'Argv.compareArgvToPatterns methods -test options (pattern `--option=* -o=*`)');
+        assert.deepEqual(result,match,'Argv.compareArgvToPatterns method -test options (pattern `--option=* -o=*`)');
 
         result=Argv.compareArgvToPatterns('--option=/value|value2/ -o="/string value|string value2/"','command1 --option "value" command2 -o "string value" command3');
         result.forEach(value=>delete value.pattern);
-        assert.deepEqual(result,match,'Argv.compareArgvToPatterns methods -test options (pattern `--option=/value|value2/ -o=/string value|string value2/`)');
+        assert.deepEqual(result,match,'Argv.compareArgvToPatterns method -test options (pattern `--option=/value|value2/ -o=/string value|string value2/`)');
     }
 
     // Argv.compareArgvToPatterns methods 2 -test options (--option=value -o="string value")
@@ -601,23 +601,23 @@ QUnit.test('test methods',function(assert){
         let match=new ArgvArray('--option=value -o="string value"');
         let result=Argv.compareArgvToPatterns('--option=value -o="string value"','command1 --option="value" command2 -o:"string value" command3');
         result.forEach(value=>delete value.pattern);
-        assert.deepEqual(result,match,'Argv.compareArgvToPatterns methods -test options (--option=value -o="string value")');
+        assert.deepEqual(result,match,'Argv.compareArgvToPatterns method -test options (--option=value -o="string value")');
 
         result=Argv.compareArgvToPatterns('--option=value -o="string value"','command1 --option:"value" command2 -o:"string value" command3');
         result.forEach(value=>delete value.pattern);
-        assert.deepEqual(result,match,'Argv.compareArgvToPatterns methods -test options (--option:value -o:"string value")');
+        assert.deepEqual(result,match,'Argv.compareArgvToPatterns method -test options (--option:value -o:"string value")');
 
         result=Argv.compareArgvToPatterns('--option=value -o="string value"','command1 --option "value" command2 -o "string value" command3');
         result.forEach(value=>delete value.pattern);
-        assert.deepEqual(result,match,'Argv.compareArgvToPatterns methods -test options (--option value -o "string value")');
+        assert.deepEqual(result,match,'Argv.compareArgvToPatterns method -test options (--option value -o "string value")');
 
         result=Argv.compareArgvToPatterns('--option=* -o=*','command1 --option "value" command2 -o "string value" command3');
         result.forEach(value=>delete value.pattern);
-        assert.deepEqual(result,match,'Argv.compareArgvToPatterns methods -test options (pattern `--option=* -o=*`)');
+        assert.deepEqual(result,match,'Argv.compareArgvToPatterns method -test options (pattern `--option=* -o=*`)');
 
         result=Argv.compareArgvToPatterns('--option=/value|value2/ -o="/string value|string value2/"','command1 --option "value" command2 -o "string value" command3');
         result.forEach(value=>delete value.pattern);
-        assert.deepEqual(result,match,'Argv.compareArgvToPatterns methods -test options (pattern `--option=/value|value2/ -o=/string value|string value2/`)');
+        assert.deepEqual(result,match,'Argv.compareArgvToPatterns method -test options (pattern `--option=/value|value2/ -o=/string value|string value2/`)');
     }
 
     // Argv.compareArgvToPatterns methods -test options (pattern `[--option -o "string value"]`)
@@ -641,10 +641,10 @@ QUnit.test('test methods',function(assert){
         let match=new ArgvArray('[! --option -o "default value"  "default value"]');
         let result=Argv.compareArgvToPatterns('[! --option -o "string value" "default value"]','command1 command2 -a:"string value" command3');
         result.forEach(value=>delete value.pattern);
-        assert.deepEqual(result,match,' Argv.compareArgvToPatterns methods -test options (pattern `[! --option -o "string value" "default value"]`)');
+        assert.deepEqual(result,match,' Argv.compareArgvToPatterns method -test options (pattern `[! --option -o "string value" "default value"]`)');
     }
 
-    // Argv.compareArgvToPatterns methods -test diff`)
+    // Argv.compareArgvToPatterns method -test diff`)
     {
         let match=new ArgvArray(
             {
@@ -665,12 +665,156 @@ QUnit.test('test methods',function(assert){
         let result=new ArgvArray();
         Argv.compareArgvToPatterns('command1','command1 command2 --option -o="value"',result);
         result.forEach(value=>delete value.pattern);
-        assert.deepEqual(result,match,' Argv.compareArgvToPatterns methods - methods -test diff');
+        assert.deepEqual(result,match,' Argv.compareArgvToPatterns method  -test diff');
+    }
+
+    // getHelp
+    {
+        let pattern=new ArgvPattern('/command1|command1_1/i command2 --option=value -o [--help -h]');
+
+        let descs={
+            '-':'desc',
+            'command1':{
+                '-':'desc command1',
+                'command2':{
+                    '-':'desc command1 command2',
+                    '--option':'desc command1 command2 --option'
+                },
+                '--option':'desc command1 --option'
+            },
+            'command1_1':{
+                '-':'desc command1_1',
+                'command2':'desc command1_1 command2',
+                '--option':'desc command1_1 command2 --option'
+            },
+            '--option':'desc --option'
+        };
+        {
+            let argv=pattern.compare('--help');
+            let message =Argv.getHelp(argv,pattern,descs);
+            let equal=`desc
+[command1]  =>   desc command1
+[command1][command2]  =>   desc command1 command2
+[command1][command2][--option]  =>   desc command1 command2 --option
+[command1][--option]  =>   desc command1 --option
+[command1_1]  =>   desc command1_1
+[command1_1][command2]  =>   desc command1_1 command2
+[command1_1][--option]  =>   desc command1_1 command2 --option
+[--option]  =>   desc --option`;
+            assert.equal(message,equal,'getHelp method  --help');            
+        }
+        {
+            let argv=pattern.compare('command1 --help');
+            let message =Argv.getHelp(argv,pattern,descs);
+            let equal=`desc
+[command1]  =>   desc command1
+[command1][command2]  =>   desc command1 command2
+[command1][command2][--option]  =>   desc command1 command2 --option
+[command1][--option]  =>   desc command1 --option`;
+            assert.equal(message,equal,'getHelp method  command1 --help');
+        }
+        {
+            
+                let argv=pattern.compare('command1 command2 --help');
+                let message =Argv.getHelp(argv,pattern,descs);
+                let equal=`desc
+[command1]  =>   desc command1
+[command1][command2]  =>   desc command1 command2
+[command1][command2][--option]  =>   desc command1 command2 --option`;
+                assert.equal(message,equal,'getHelp method  command1 command2 --help');
+        }
+        {
+            let argv=pattern.compare('command1 command2 --option --help');
+            let message =Argv.getHelp(argv,pattern,descs);
+            let equal=`desc
+[command1]  =>   desc command1
+[command1][command2]  =>   desc command1 command2
+[command1][command2][--option]  =>   desc command1 command2 --option
+[command1][--option]  =>   desc command1 --option
+[--option]  =>   desc --option`;
+            assert.equal(message,equal,'getHelp method  command1 command2 --option --help');
+            
+        }
+        {
+            let argv=pattern.compare('command1_1 --help');
+            let message =Argv.getHelp(argv,pattern,descs);
+            let equal=`desc
+[command1_1]  =>   desc command1_1
+[command1_1][command2]  =>   desc command1_1 command2
+[command1_1][--option]  =>   desc command1_1 command2 --option`;
+            assert.equal(message,equal,'getHelp method  command1_1 --help');
+            
+        }
+        {
+            let argv=pattern.compare('command1_1 --help');
+            let message =Argv.getHelp(argv,pattern,descs);
+            let equal=`desc
+[command1_1]  =>   desc command1_1
+[command1_1][command2]  =>   desc command1_1 command2
+[command1_1][--option]  =>   desc command1_1 command2 --option`;
+            assert.equal(message,equal,'getHelp method  command1_1 --help');
+            
+        }
+        {
+            let argv=pattern.compare('command1_1 command2 --help');
+            let message =Argv.getHelp(argv,pattern,descs);
+            let equal=`desc
+[command1_1]  =>   desc command1_1
+[command1_1][command2]  =>   desc command1_1 command2`;
+            assert.equal(message,equal,'getHelp method  command1_1 command2 --help');
+            
+        }
+        pattern.get({order:1}).descriptions={
+            'command1_1':{
+                'command2':'re_desc command1_1 command2',
+                '--option':'re_desc command1_1 --option'
+            }
+        };
+        {
+            let argv=pattern.compare('command1_1 command2 --help');
+            let message =Argv.getHelp(argv,pattern,descs);
+            let equal=`desc
+[command1_1][command2]  =>   re_desc command1_1 command2`;
+            assert.equal(message,equal,'getHelp method  command1_1 command2 --help');
+            
+        }
+        {
+            let argv=pattern.compare('command1_1 --option --help');
+            let message =Argv.getHelp(argv,pattern,descs);
+            let equal=`desc
+[command1_1][--option]  =>   re_desc command1_1 --option
+[--option]  =>   desc --option`;
+            assert.equal(message,equal,'getHelp method  "command1_1 --option --help"');
+            
+        }
+        {
+            let pHelp=pattern.get('--help');
+            pHelp.descriptions=descs;
+            let argv=pattern.compare('--help');
+            let help=argv.get('--help');
+            let message=help.helpMessage;
+            let equal=`desc
+[command1]  =>   desc command1
+[command1][command2]  =>   desc command1 command2
+[command1][command2][--option]  =>   desc command1 command2 --option
+[command1][--option]  =>   desc command1 --option
+[command1_1][command2]  =>   re_desc command1_1 command2
+[command1_1][--option]  =>   re_desc command1_1 --option
+[--option]  =>   desc --option`;
+            assert.equal(message,equal,'ArgvArray.compare  --help');
+
+        }
+        
+    }
+
+    
+    // compareArgPatterns --help
+    {
+        
     }
 
     // Errors
     {
-
         assert.throws(function(){
             let result=Argv.compareArgvToPatterns('command1 command2 /command3|command4/','command1 command4 command5');
         },function(e){
@@ -699,6 +843,8 @@ QUnit.test('test methods',function(assert){
         }, 'Parameter undefined');
 
     }
+
+
 
 
 });

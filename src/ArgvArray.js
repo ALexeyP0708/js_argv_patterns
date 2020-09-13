@@ -122,7 +122,7 @@ export class ArgvArray extends Array {
 
     /**
      * search argv element
-     * @param {ArgvElement} element
+     * @param {ArgvElement|object} element
      * @param {boolean} isFirst - one result in array
      * @returns {ArgvElement[]}  
      *

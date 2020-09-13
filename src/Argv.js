@@ -456,13 +456,20 @@ export class Argv {
         let check=false;
         let argvCommandKey=0,patternCommandKey=0;
         let errors=[];
+        let help=argv.get('[--help -h]');
         for(let key=0; key<argv.length; key++){
             if(argv[key].type==='command'){argvCommandKey++;}
+            if(argv[key].type==='option' && argv[key].key==='help'){
+                continue;
+            }
             patternCommandKey=0;
             let param=new Argv.elementClass(argv[key]);
             check=false;
             for(let pkey=0; pkey<patterns.length; pkey++){
                 if(patterns[pkey].type==='command'){patternCommandKey++;}
+                if(patterns[pkey].type==='option' && patterns[pkey].key==='help'){
+                    continue;
+                }
                 if(argvCommandKey===patternCommandKey && argv[key].type==='command' && patterns[pkey].type==='command'){
                     let pattern = patterns[pkey].key;
                     for(let prop of Object.keys(patterns[pkey])){
@@ -517,26 +524,21 @@ export class Argv {
                         if(['type','key','shortKey','value','order'].includes(prop)){ continue;}
                         param[prop]=param[prop]??patterns[pkey][prop];
                     }
+                    check=true;
+                    param.pattern=patterns[pkey];
+                    intersect.push(param);
                     if(pattern instanceof RegExp ){
-                        if(typeof param.value ==='string' && pattern.test(param.value)){
-                            check=true;
-                            param.pattern=patterns[pkey];
-                            intersect.push(param);
-                        } else {
+                        if(typeof param.value !=='string' || !pattern.test(param.value)){
                             let message= param.errorMessage ??`The value "${param.value}" of "${prefix}${param.key??param.shortKey}" option (parameter ${key+1}) does not match "${pattern.toString()}" pattern.`;
                             //throw new Error(message);
                             errors.push(message);
                         }
                     } else
-                    if((pattern==="*" || pattern == param.value)){
-                        check=true;
-                        param.pattern=patterns[pkey];
-                        intersect.push(param);
-                    } else {
+                    if((pattern!=="*" && pattern != param.value)){
                         let message= param.errorMessage ??`The value "${param.value}" of "${prefix}${param.key??param.shortKey}" option (parameter ${key+1}) does not match "${pattern}".`;
                         //throw new Error(message);
                         errors.push(message);
-                    }
+                    } 
                     key+=shift;
                     break;
                 }
@@ -609,12 +611,102 @@ export class Argv {
                 }
              }
         }
+        if(help){
+            let helpPattern=patterns.get('[--help -h]');
+            let descriptions={};
+            if(helpPattern){
+                descriptions=helpPattern.descriptions;
+            }
+            let message=Argv.getHelp(argv,patterns,descriptions);
+            Object.defineProperty(help,'helpMessage',{
+                enumerable:true,
+                configurable:true,
+                writable:true,
+                value:message
+            });
+            intersect.push(help);
+        } else
         if(errors.length>0){
             throw new Error("\n"+'Error:'+errors.join("\nError:"));
         }
         return intersect;
     }
 
+    /**
+     * 
+     * @param argv
+     * @param pattern
+     * @param {object} descriptions
+     * {
+     *     '-':'this desc', 
+     *     '#':1 // order for command
+     * }
+     * @returns {*}
+     */
+    static getHelp(argv,pattern,descriptions={}){
+        if(!argv.get('[--help -h]')){return false;}
+        if(argv.length<=1){
+            argv= pattern;
+        }
+        let order=0;
+        let recurs=(desc,prefix='')=>{
+            let messages=[];
+            if(desc instanceof Object){
+                if(desc['-']!==undefined){
+                    messages.push(recurs(desc['-'],`${prefix}`));
+                }
+                let check=false;
+                for(let prop in desc) {
+                    if(['-'].includes(prop)){continue;}
+                    let element;
+                    for (let key = 0; key < argv.length; key++) {
+                        element=argv[key];
+                        if( element.type==='option' && prop[0]==='-'){
+                            let name=element.key?`--${element.key}`:`-${element.shortKey}`;
+                            if(name===prop){
+                                messages.push(recurs(desc[prop],`${prefix}[${prop}]`));
+                                check=true;
+                                break;
+                            }
+                        } else if(element.type==='command' && prop[0]!=='-'){
+                            order++;
+                            if(element.order === order && (element.key instanceof RegExp && element.key.test(prop) || element.key==='*' || element.key.toString()===prop)){
+                                messages.push(recurs(desc[prop],`${prefix}[${prop}]`));
+                                check=true;
+                                order--;
+                                break;
+                            }
+                            order--;
+                        }
+                    }
+                }
+                if(!check){
+                    for(let prop in desc) {
+                        if(['-'].includes(prop)){continue;}
+                        messages.push(recurs(desc[prop],`${prefix}[${prop}]`));
+                    }
+                }
+            } else {
+                if(prefix.trim()===''){
+                    messages=[`${desc}`];
+                } else{
+                    messages=[`${prefix}  =>   ${desc}`];
+                }
+            }
+            if(messages.length===0){
+                messages.push(`${prefix} =>  Описание параметров отсутствует.`);
+            }
+            return messages.join("\n");
+        };
+        for(let key=0;key<argv.length;key++){
+            let element=argv[key];
+            if(element.descriptions!==undefined){
+                descriptions=Object.assign(descriptions,element.descriptions);
+                // сделать рекурсивное обьеденение
+            }
+        }
+        return recurs(descriptions);
+    }
 }
 
 /**

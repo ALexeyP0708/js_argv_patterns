@@ -66,6 +66,12 @@ export class ArgvElement{
                 writable:true,
                 configurable:false,
                 value:undefined,
+            },
+            descriptions:{
+                enumerable:true,
+                writable:true,
+                configurable:false,
+                value:undefined,
             }
         });
         let te=typeof element;
