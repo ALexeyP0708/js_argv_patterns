@@ -1,125 +1,15 @@
 # Install
 ()
 
-# Getting Started
+## Description
 This component allows you to manage command line parameters (argv parameters).  
 To do this, create a pattern and compare parameters of incoming requests from the console with this pattern.
 Why another semblance of Commander.js component?
  This is a different look at writing commanders.
+ To do this, create a pattern and compare parameters of incoming requests from the console with this pattern.
 For example, let's create a helper for a certain start command that launches the specified script.
-```js
-let pattern = new ArgvPattern('/start|end/i /[\\s\\w]\\.js/i [--force -f] [--help -h]');  
-/*  
-	test commands for cLine variable 
-	'--help'
-	'start --help'   
-	'start --force --help'   
-	'end --force --help'   
-	'end --help'   
-	'end --force --help'  
-	'start --after --help'
-	'end --after --help' 
-	'start --after --force --help' 
-	'end --after --force --help'
- */  
 
-let cLine='end --help'; // suppose this is a command passed to the script   
-let diff=new ArgvArray(); // the rest of the parameters will be indicated here    
-let argv=pattern.compare(cLine,diff);  
-let help=argv.get('--help');  
-let helpMessages={  
-	start:`start path/js/script -command "start" runs script.`,  
-	end:`end path/js/file - ends script execution.`,  
-	'--force':`[--force -f] - Forces the script to start or end.`,  
-};  
-if(help){  
-    let check=false;  
-	let message=[];  
-	if(argv.get('start',{order:1})){
-		// добавляем описание команды "start"
-		message.push(helpMessages['start']);  
-		check=true;  
-	} else  
-	if(argv.get('end',{order:1})){  
-		// добавляем описание команды "end"
-	    message.push(helpMessages['end']);  
-		check=true;  
-	}  
-	// добовляем описание "--force" если   есть команда "start" или "end" и присутствует параметр '--force' или отсутствуют опции кроме '--help' 
-	if(check===true &&  
-		(
-			argv.get('--force') || 
-			argv.searchElement({type:'option',key:/[\w]+/i}).length<=1 && 
-			diff.searchElement({type:'option',key:/[\w]+/i}).length<=0
-		)
-	){
-	    message.push(helpMessages['--force']);  
-	}  
-	// добавляем все описание если нет указанных комманд
-	if(!check){  
-	    message=Object.values(helpMessages);  
-	}  
-	if(message.length>0){  
-	    console.log(message.join("\n"));  
-	}  
-} else {  
-    // code for start or end script    
-}  
-// other code. Suppose you decided to expand the functionality by adding parameters without interfering with the main code.
-let extPattern = new ArgvPattern('[--after *]');  
-let extArgv=extPattern.compare(diff); //you can use the cLine variable instead of diff.    
-let extHelpMessages = {  
-	'--after':{  
-		start:`[--after=pathc/js/script] - Will execute the script after running the main script.`,  
-		end:`[--after=pathc/js/script] - Will execute the script after the main script finishes.`  
-	}  
-};  
-if(argv.get('--help')){ 
-    let message=[];  
-	let check=false;  
-	if( 
-		// добовляем описание "--after" если   есть команда "start"  и присутствует параметр '--after' или отсутствуют опции кроме '--help' 
-		argv.get('start',{order:1}) && 
-		(
-			extArgv.get('--after')  ||
-			argv.searchElement({type:'option',key:/[\w]+/i}).length<=1
-			diff.searchElement({type:'option',key:/[\w]+/i}).length<=0
-		)
-	){  
-	        message.push(extHelpMessages['--after']['start']);  
-	} else 
-// добовляем описание "--after" если   есть команда "end"  и присутствует параметр '--after' или отсутствуют опции кроме '--help' 
-	if(
-	    argv.get('end',{order:1}) && 
-	    (
-		    extArgv.get('--after') ||
-		    argv.searchElement({type:'option',key:/[\w]+/i}).length<=1 &&
-			diff.searchElement({type:'option',key:/[\w]+/i}).length<=0
-		)
-	){  
-        message.push(extHelpMessages['--after']['end']);  
-	} else 
-	// добовляем все описания "--after" если  отсутствуют опции кроме '--help' 
-	if(argv.searchElement({type:'option',key:/[\w]+/i}).length<=1){  
-	    message=Object.values(extHelpMessages['--after']);  
-	}  
-    if(message.length>0){ 
-	        console.log(message.join("\n"));  
-	}  
-} else {  
-    // code for start or end additional script    
-}  
-
-```
-OK. But why do we need to write a helper?  For starters, this is an example that shows how you can work with this module. Helper('--help' ) is implemented in this module. Its description will be after.
-
-```js
-
-```
-
-# Description
-This component allows you to manage command line parameters (argv parameters).   
-To do this, create a pattern and compare parameters of incoming requests from the console with this pattern.
+If the examples are not clear the first time, that's okay. They are presented for general presentation.
 
 Exemple
 ```js
@@ -172,9 +62,116 @@ pattern
     });
 pattern.compare(['style','set','--color blue']);
 ``` 
+For example, let's create a helper for a certain start command that launches the specified script.
+```js
+let pattern = new ArgvPattern('/start|end/i /[\\s\\w]\\.js/i [--force -f] [--help -h]');  
+/*  
+	test commands for cLine variable 
+	'--help'
+	'start --help'   
+	'start --force --help'   
+	'end --force --help'   
+	'end --help'   
+	'end --force --help'  
+	'start --after --help'
+	'end --after --help' 
+	'start --after --force --help' 
+	'end --after --force --help'
+ */  
+
+let cLine='end --help'; // suppose this is a command passed to the script   
+let diff=new ArgvArray(); // the rest of the parameters will be indicated here    
+let argv=pattern.compare(cLine,diff);  
+let help=argv.get('--help');  
+let helpMessages={  
+	start:`start path/js/script -command "start" runs script.`,  
+	end:`end path/js/file - ends script execution.`,  
+	'--force':`[--force -f] - Forces the script to start or end.`,  
+};  
+if(help){  
+    let check=false;  
+	let message=[];  
+	if(argv.get('start',{order:1})){
+		// add a description of the "start" command
+		message.push(helpMessages['start']);  
+		check=true;  
+	} else  
+	if(argv.get('end',{order:1})){  
+		// add a description of the "end" command
+	    message.push(helpMessages['end']);  
+		check=true;  
+	}  
+	// add the "--force" description if there is a "start" or "end" command and the '--force' parameter is present or there are no options other than '--help'.
+	if(check===true &&  
+		(
+			argv.get('--force') || 
+			argv.searchElement({type:'option',key:/[\w]+/i}).length<=1 && 
+			diff.searchElement({type:'option',key:/[\w]+/i}).length<=0
+		)
+	){
+	    message.push(helpMessages['--force']);  
+	}  
+// add the entire description if there are no specified commands
+	if(!check){  
+	    message=Object.values(helpMessages);  
+	}  
+	if(message.length>0){  
+	    console.log(message.join("\n"));  
+	}  
+} else {  
+    // code for start or end script    
+}  
+// other code. Suppose you decided to expand the functionality by adding parameters without interfering with the main code.
+let extPattern = new ArgvPattern('[--after *]');  
+let extArgv=extPattern.compare(diff); //you can use the cLine variable instead of diff.    
+let extHelpMessages = {  
+	'--after':{  
+		start:`[--after=pathc/js/script] - Will execute the script after running the main script.`,  
+		end:`[--after=pathc/js/script] - Will execute the script after the main script finishes.`  
+	}  
+};  
+if(argv.get('--help')){ 
+    let message=[];  
+	let check=false;  
+	if( 
+		// add the description "--after" if there is a command "start" and the parameter '--after' is present or there are no options other than '--help'
+		argv.get('start',{order:1}) && 
+		(
+			extArgv.get('--after')  ||
+			argv.searchElement({type:'option',key:/[\w]+/i}).length<=1
+			diff.searchElement({type:'option',key:/[\w]+/i}).length<=0
+		)
+	){  
+	        message.push(extHelpMessages['--after']['start']);  
+	} else 
+// add the "--after" description if there is an "end" command and the '--after' parameter is present or there are no options other than '--help'
+	if(
+	    argv.get('end',{order:1}) && 
+	    (
+		    extArgv.get('--after') ||
+		    argv.searchElement({type:'option',key:/[\w]+/i}).length<=1 &&
+			diff.searchElement({type:'option',key:/[\w]+/i}).length<=0
+		)
+	){  
+        message.push(extHelpMessages['--after']['end']);  
+	} else 
+	// add all "--after" descriptions if there are no options except for '--help'
+	if(argv.searchElement({type:'option',key:/[\w]+/i}).length<=1){  
+	    message=Object.values(extHelpMessages['--after']);  
+	}  
+    if(message.length>0){ 
+	        console.log(message.join("\n"));  
+	}  
+} else {  
+    // code for start or end additional script    
+}  
+
+```
+OK. But why do we need to write a helper?  For starters, this is an example that shows how you can work with this module. Helper('--help' ) is implemented in this module. Its description will be after.
+
 ## classes for instances
 
-Instance ArgvArray class - intended for command line elements. Describes the command line.  Extends Array;
+Instance [ArgvArray](https://github.com/ALexeyP0708/js_argv_patterns/tree/master/docs) class - intended for command line elements. Describes the command line.  Extends Array;
 ```js
 	new ArgvArray('command --option=value');
 	// or
@@ -194,7 +191,7 @@ Instance ArgvArray class - intended for command line elements. Describes the com
 	]
 	*/
 ```
-Instance  ArgvPattern class - is intended to create a comparison pattern. 
+Instance  [ArgvPattern](module-@alexeyp0708_argv_patterns.ArgvPattern.html) class - is intended to create a comparison pattern. 
  Extends ArgvArray;  
 ```js
 	new ArgvPattern ('/command[\d]/i --option=/[\w]+/i');
@@ -207,7 +204,7 @@ Instance  ArgvPattern class - is intended to create a comparison pattern.
 	*/
 ```
 
-ArgvElement - describes a command line element
+Instance [ArgvElement](docs/module-@alexeyp0708_argv_patterns.ArgvPattern.html) class - describes a command line element
 
 ```js
 new ArgvElement('command1');
@@ -226,7 +223,7 @@ ArgvElement{
 
 ```
 Other 
-Instance  ArgvObject class -  Converted ArgvArray to object. Syntactic sugar.
+Instance  [ArgvObject](docs/ArgvObject.js.html) class -  Converted ArgvArray to object. Syntactic sugar.
 ```js
 let argv=new ArgvArray('command1 --option1 command2');
 argv=argv.toObject();
@@ -240,9 +237,10 @@ argv=argv.toObject();
 */
 ```
  
-## pattern structure
+## Pattern string syntax 
 
-String syntax is the same for ArgvArray constructor and for constructor ArgvPattern constructor.
+String syntax is the same for ArgvArray constructor, for constructor ArgvPattern constructor,for ArgObject constructor and for ArgvElement constructor.
+ArgvElement accepts single parameter syntax.
 
 ### commands
 
@@ -268,7 +266,7 @@ let pattern= new ArgvPattern('*');
 pattern= new ArgvPattern({type:'command',key:'*'});
 pattern.compare('anyCommand');
 ```
-- If it is a regular expression, then the comparison will be performed according to the regular expression - `pattern.test (string)`.
+- If it is a regular expression, then the comparison will be performed according to the regular expression - `reg_exp.test (string)`.
 ```js
 let pattern= new ArgvPattern('/command1|command1_1/i'); 
 // or
@@ -280,9 +278,11 @@ pattern.compare('command1_1');
 ```
 
 Extended syntax style for command pattern:
-- `[! command_pattern]` - mandatory command
-- `[command_pattern default_command]` - default if no command is specified
-- `[! command_pattern default_command]` it makes no sense to write like this since the default value is set.
+- `[command_pattern]` - {type:'command', key:'command_pattern'} 
+- `[command_pattern default_command]` - {type:'command', key:'command_pattern', default:'default_command'} 
+- `["long command" "default command"]` - {type:'command', key:'long command', default:'default command'} 
+- `[!"long command"]`- {type:'command', key:'long command', required:true} 
+
 ```js
  let pattern=new ArgvPattern('command1 [* default_command]');
  let command=pattern.compare('command1');
@@ -429,35 +429,209 @@ let result=pattern.compare(['--option1', 'value for option']);
 		];
 	*/
 ```
+Extended syntax style options for pattern:
+- `[--option]` => {type:'option', key:'option', value:true}
+- `[--option -o]` or `[-o --option]` => {type:'option', key:'option', shortKey:'o',value:true}
+- `[-o]` =>{type:'option', shortKey:'o', value:true}
+- [--option value] =>{type:'option',  key:'option', value:"value"}
+- `[--option "long value"]` =>{type:'option',  key:'option', value:"long value"}
+- `[--option "long value" "default value"]` =>{type:'option',  key:'option', value:"long value", default:"default value"}
+- `[! --option "long value"] =>`{type:'option',  key:'option', value:"long value", required:true}
+- `[ --option -o "long value" "default value"]` -  What will happen here? ))))
 
-### Поиск элементов.
-Example
 ```js
- let pattern=new ArgvPattern('command1 --option * /command3|command3_1/i');
-element=pattern.get({type:'command',order:2});// вернет команду на позиции 2 в стеке комманд
-element=pattern.get({type:'command',key:'/command3|command3_1/i'});// найдет команду с регулярным выражением. Обратить внимание что это  строка.
-// Если будет реальное регулярное выражение, то произведет поиск на сопостовление с регулярным выражением 
-element=pattern.get('command1');// найдет команду command1
-element=pattern.get('command1',{order:1});// соответствует ли команда на позиции 1 command1
-element=pattern.get({order:1,key:/command1|command1_1/i});
+ let pattern=new ArgvPattern('command1 [!--option -o *]');
+ let command=pattern.compare('command1 -o "a good day"');
+ console.log(command);
+ /*
+    [
+        {
+            type:'command',
+            key:'command1'
+            //....
+        },
+        {
+            type:'option',
+            key:'option',
+            shortKey:'o',
+            value:'a good day',
+            required:true
+            //....
+        }
+    ]
+ */
 ```
-и [ArgvArray.prototype.get](docs/module-@alexeyp0708_argv_patterns.ArgvArray.html)
+
 ```js
-    //ArgvArray or ArgvPattern
-let argv=new ArgvArray('command1','command1','command2','--option1=value1','--option2=value2','-a=value2','-b=value1');
-let result=argv.searchElement({order:1});// [argv[0]]
-result=argv.searchElement({key:'command1'});// [argv[0],argv[1]]
-result=argv.searchElement({key:'command2'},true);// [argv[2]]
-result=argv.searchElement({key:/command[\d]/});// [argv[0],argv[1],argv[2]]
-result=argv.searchElement({key:/command[\d]/,order:2});// [argv[1]]
-result=argv.searchElement({key:'command6'});// []
-result=argv.searchElement({type:'option',key:'option1'});// [argv[3]]
-result=argv.searchElement({type:'option',key:'option1',value:'value1'});//[argv[3]]
-result=argv.searchElement({type:'option',key:'option1',value:/value[\d]/});// [argv[3]]
-result=argv.searchElement({type:'option',key:/option[\d]/,value:/value[\d]/});// [argv[3],argv[4]]
-result=argv.searchElement({type:'option',shortKey:/[ab]/,value:/value[\d]/});// [argv[5],argv[6]]
-result=argv.searchElement({type:'option',key:/option[\d]/,shortKey:/[ab]/,value:/value[\d]/});// [argv[3],argv[4],argv[5],argv[6]]
-result=argv.searchElement({type:'option',key:/option[\d]/,shortKey:/[ab]/,value:/^[\d]$/});// []
-result=argv.searchElement({type:'option',key:/option[\d]/,shortKey:/[ab]/,value:/^value[\d]$/},true);// [argv[3]]
+ let pattern=new ArgvPattern('command1 [--option -o * "a bad day"]');
+ let command=pattern.compare('command1');
+ /*
+    [
+        {
+            type:'command',
+            key:'command1'
+            //....
+        },
+        {
+            type:'option',
+            key:'option',
+            shortKey:'o',
+            value:'a bad day',
+            required:true
+            //....
+        }
+    ]
+ */
+
 ```
-Также смотрите методы [ArgvArray.prototype.searchElement](docs/module-@alexeyp0708_argv_patterns.ArgvArray.html) 
+## Brief API
+В своем коде вы будете использовать следующие методы и объекты:
+- [ArgvArray]( docs/module-@alexeyp0708_argv_patterns.ArgvArray.html) object - массив параметров (ArgvElemnet objects), созданный из argv параметров или командной строки. (Далее массив командной строки)
+- [ArgvPattern](docs/module-@alexeyp0708_argv_patterns.ArgvPattern.html ) object (extends ArgvArray) - массив параметров (ArgvElemnet objects) , созданный из argv параметров (array)  или командной строки. Предназначен для сравнения с ним параметров и командной строки. (Далее патерн командной строки)
+- [ArgvElement](docs/module-@alexeyp0708_argv_patterns.ArgvElement.html ) object - объект который описывает параметр командной строки. (Далее элемент командной строки)
+- [ArgvArray.prototype.add]( ) method - добавляет новый элемент командной строки по установленным критериям, которого еще нет в массиве командной строки.
+- [ArgvArray.prototype.set]( ) method - добавляет новый или изменяет существующий элемент командной строки.
+- [ArgvArray.prototype.get] () method - делает запрос элемента командной строки согласно установленным критериям.
+- [ArgvArray.prototype.searchElement] () method - осуществляет поиск элементов командной строки удовлетворяющие критериям.
+- [ArgvArray.prototype.searchElements]( ) method - осуществляет поиск элементов командной строки удовлетворяющие нескольким критериям командной строки.
+-  [ArgvArray.prototype.toObject]( ) method - преобразует в ArgvObjecе, для удобства использования
+-  [ArgvArray.prototype.toString]( ) method - преобразует массив командной строки в командную строку.
+-  [ArgvPattern.prototype.compare]( ) method - сравнивает массив командной строки или командную строку с патерном командной строки.
+- [ArgvPattern.prototype.toString]( ) method - преобразует патерн командной строки  из массива в командную строку. 
+
+#### ArgvArray array
+```js
+
+// passing a solid command line
+let argvLine=new ArvArray('command1 --option subCommand');
+
+// or pass an array of strings of command line parameters
+argvLine=new ArvArray(['command1', '--option', 'subCommand']);
+
+//or each argument is a command line parameter string
+argvLine= new ArvArray('command1',  '--option','subCommand');
+
+/*or the above is repeated, but ArgvElement objects or their templates are passed as parameters.*/
+argvLine= new ArvArray(new ArgvElement('command1'), {type:'option', key:'option'},'subCommand');
+
+// Each command line parameter passed will be an ArgvElement for the ArgvArray array.
+argvLine.set('subCommand',{required:true}); // find subCommand name and set new data
+// or
+argvLine.set('[! subCommand]');
+//or
+argvLine.set('[! /subCommand[\w]*/i]');
+//or
+argvLine.set({type:'command',key:'subCommand',required:true});
+//or
+argvLine.set({type:'command',key:'/subCommand[\w]/i',required:true});
+
+/*for the set method, the element is searched only by the
+properties key, shortKey, or by order for commands.*/
+
+/* if you specify the "order" property, it will search for 
+a specific command position and will replace with new data.*/
+argvLine.set('[! newSubCommand]',{order:2}); 
+
+/*In the "add" method, the argument passing logic is the same as in the set method examples.
+For the "add" method, the element is searched only by the
+properties key, shortKey, or by order for commands.
+No search is performed for commands by key.
+Only search by order.
+*/
+
+//add new command in order 3
+argvLine.add('subCommand',{required:true}); 
+
+//The parameter was not added because the 2nd command already exists.
+argvLine.add('subCommand',{order:2.required:true});
+
+/*for add and set methods you can use the following syntax:*/
+(new ArgvArray())
+.set('command')
+.add('subCommand')
+.add('--option');
+
+
+/* In the "get" method, the argument passing logic is the same 
+as in the set method examples. 
+Returns an ArgvElement object.
+The get method uses the searchElement method to search. 
+Therefore, the search logic for these methods will be the 
+same.
+The get method returns the first match it finds.
+Search is performed by keys, order (if this is a command) 
+and value (if this is an option).
+If a command is searched for, but no order is specified, the command corresponding to the key will be found.
+*/
+
+// return {key:'subCommand',order:2}
+element=argvLine.get('subCommand'); 
+
+// return {key:'subCommand',order:2} if key==='subCommand' and order===2
+element=argvLine.get('subCommand',{order:2}); 
+
+// return the command at order 2
+element=argvLine.get({order:2}); 
+
+//Will return the command at order 2 if its key matches the pattern
+element=argvLine.get('/^subCommand[\d]*/i',{order:2});
+
+// will return the option "option" 
+element=argvLine.get('--option');
+
+// will return the option "option" if the value matches "value"
+element=argvLine.get('--option=value');
+
+// will return the option "option" if its value matches the pattern
+element=argvLine.get('--option=/^value[\d]*/i');
+
+// Returns the option whose key is equal to the pattern
+element=argvLine.get({type:'option',key:'/^opton[\d]*/i'});
+
+//the searchElement method, unlike the get method, returns a set of matches.
+// return ArgvArray
+argvLine.searchElement('--option');
+
+// return ArgvArray
+argvLine.searchElement({type:'option',key:'/^option[\d]/i'});
+
+//Will only return an array with the first match
+argvLine.searchElement({type:'option',key:'/^option[\d]/i'},true); 
+
+//searchElements method will return all matches according to the specified criteria in the 1st argument array.
+argvLine.searchElements(['command1','--option']);
+
+//if it is necessary to return 1 match for each criterion
+argvLine.searchElements(['command1','--option'],true);
+
+//If you need to return ArgvArray as a single command of the found matches
+argvLine.searchElements(['command1','--option'],true,true);
+//or
+argvLine.searchElements(['command1','--option'],false,true);
+
+argvLine.toString(); // return string command line 
+```
+
+#### ArgvPattern array
+ArgvPattern completely repeats the ArgvArray methods
+```js
+let pattern= new ArgvPattern('[/command1|command2/i command1] --option=*');
+let diff=new ArgvArray(); // or Array();//these are filtered parameters that do not match the pattern and are not included in the result. 
+let argv=pattern.compare(new ArgvArray('command1 --option "value option"'),diff);
+//or
+argv=pattern.compare('command1 --option "value option"',diff);
+//or 
+argv=pattern.compare(['command1', '--option "value option"'],diff);
+
+/*
+Error: Throws an error if the parameter is set according to 
+the pattern, but does not match the criteria of the pattern. 
+Error: Throws an error if an extra parameter is passed. Throws an error if diff argument is false. 
+Error: Throws an error if the parameter is required according 
+to the pattern, but it is missing and the default value is 
+not set in the pattern.
+
+*/
+
+pattern.toString(); // return [/command1|command2/i command1] --option=*
+```
