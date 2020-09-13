@@ -171,7 +171,7 @@ OK. But why do we need to write a helper?  For starters, this is an example that
 
 ## classes for instances
 
-Instance [ArgvArray](https://github.com/ALexeyP0708/js_argv_patterns/tree/master/docs) class - intended for command line elements. Describes the command line.  Extends Array;
+Instance [ArgvArray](docs/module-@alexeyp0708_argv_patterns.ArgvArray.html) class - intended for command line elements. Describes the command line.  Extends Array;
 ```js
 	new ArgvArray('command --option=value');
 	// or
@@ -191,7 +191,7 @@ Instance [ArgvArray](https://github.com/ALexeyP0708/js_argv_patterns/tree/master
 	]
 	*/
 ```
-Instance  [ArgvPattern](module-@alexeyp0708_argv_patterns.ArgvPattern.html) class - is intended to create a comparison pattern. 
+Instance  [ArgvPattern](docs/module-@alexeyp0708_argv_patterns.ArgvPattern.html) class - is intended to create a comparison pattern. 
  Extends ArgvArray;  
 ```js
 	new ArgvPattern ('/command[\d]/i --option=/[\w]+/i');
@@ -204,7 +204,7 @@ Instance  [ArgvPattern](module-@alexeyp0708_argv_patterns.ArgvPattern.html) clas
 	*/
 ```
 
-Instance [ArgvElement](docs/module-@alexeyp0708_argv_patterns.ArgvPattern.html) class - describes a command line element
+Instance [ArgvElement](docs/module-@alexeyp0708_argv_patterns.ArgvElement.html) class - describes a command line element
 
 ```js
 new ArgvElement('command1');
@@ -223,7 +223,7 @@ ArgvElement{
 
 ```
 Other 
-Instance  [ArgvObject](docs/ArgvObject.js.html) class -  Converted ArgvArray to object. Syntactic sugar.
+Instance  [ArgvObject](docs/module-@alexeyp0708_argv_patterns.ArgvObject.html) class -  Converted ArgvArray to object. Syntactic sugar.
 ```js
 let argv=new ArgvArray('command1 --option1 command2');
 argv=argv.toObject();
@@ -486,18 +486,18 @@ Extended syntax style options for pattern:
 ```
 ## Brief API
 В своем коде вы будете использовать следующие методы и объекты:
-- [ArgvArray]( docs/module-@alexeyp0708_argv_patterns.ArgvArray.html) object - массив параметров (ArgvElemnet objects), созданный из argv параметров или командной строки. (Далее массив командной строки)
+- [ArgvArray](docs/module-@alexeyp0708_argv_patterns.ArgvArray.html) object - массив параметров (ArgvElemnet objects), созданный из argv параметров или командной строки. (Далее массив командной строки)
 - [ArgvPattern](docs/module-@alexeyp0708_argv_patterns.ArgvPattern.html ) object (extends ArgvArray) - массив параметров (ArgvElemnet objects) , созданный из argv параметров (array)  или командной строки. Предназначен для сравнения с ним параметров и командной строки. (Далее патерн командной строки)
 - [ArgvElement](docs/module-@alexeyp0708_argv_patterns.ArgvElement.html ) object - объект который описывает параметр командной строки. (Далее элемент командной строки)
-- [ArgvArray.prototype.add]( ) method - добавляет новый элемент командной строки по установленным критериям, которого еще нет в массиве командной строки.
-- [ArgvArray.prototype.set]( ) method - добавляет новый или изменяет существующий элемент командной строки.
-- [ArgvArray.prototype.get] () method - делает запрос элемента командной строки согласно установленным критериям.
-- [ArgvArray.prototype.searchElement] () method - осуществляет поиск элементов командной строки удовлетворяющие критериям.
-- [ArgvArray.prototype.searchElements]( ) method - осуществляет поиск элементов командной строки удовлетворяющие нескольким критериям командной строки.
--  [ArgvArray.prototype.toObject]( ) method - преобразует в ArgvObjecе, для удобства использования
--  [ArgvArray.prototype.toString]( ) method - преобразует массив командной строки в командную строку.
--  [ArgvPattern.prototype.compare]( ) method - сравнивает массив командной строки или командную строку с патерном командной строки.
-- [ArgvPattern.prototype.toString]( ) method - преобразует патерн командной строки  из массива в командную строку. 
+- [ArgvArray.prototype.add](docs/module-@alexeyp0708_argv_patterns.ArgvArray.html#add) method - добавляет новый элемент командной строки по установленным критериям, которого еще нет в массиве командной строки.
+- [ArgvArray.prototype.set](docs/module-@alexeyp0708_argv_patterns.ArgvArray.html#set) method - добавляет новый или изменяет существующий элемент командной строки.
+- [ArgvArray.prototype.get] (docs/module-@alexeyp0708_argv_patterns.ArgvArray.html#get) method - делает запрос элемента командной строки согласно установленным критериям.
+- [ArgvArray.prototype.searchElement] (docs/module-@alexeyp0708_argv_patterns.ArgvArray.html#searchElement) method - осуществляет поиск элементов командной строки удовлетворяющие критериям.
+- [ArgvArray.prototype.searchElements](docs/module-@alexeyp0708_argv_patterns.ArgvArray.html#searchElement#searchElements) method - осуществляет поиск элементов командной строки удовлетворяющие нескольким критериям командной строки.
+-  [ArgvArray.prototype.toObject](docs/module-@alexeyp0708_argv_patterns.ArgvArray.html#searchElement#toObject) method - преобразует в ArgvObjecе, для удобства использования
+-  [ArgvArray.prototype.toString](docs/module-@alexeyp0708_argv_patterns.ArgvArray.html#searchElement#toString) method - преобразует массив командной строки в командную строку.
+-  [ArgvPattern.prototype.compare](docs/module-@alexeyp0708_argv_patterns.ArgvPattern.html#searchElement#compare) method - сравнивает массив командной строки или командную строку с патерном командной строки.
+- [ArgvPattern.prototype.toString](docs/module-@alexeyp0708_argv_patterns.ArgvPattern.html#searchElement#toString) method - преобразует патерн командной строки  из массива в командную строку. 
 
 #### ArgvArray array
 ```js
