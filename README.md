@@ -1,5 +1,4 @@
 # Install
-()
 
 ## Description
 This component allows you to manage command line parameters (argv parameters).  
@@ -485,20 +484,20 @@ Extended syntax style options for pattern:
 
 ```
 ## Brief API
-В своем коде вы будете использовать следующие методы и объекты:
-- [ArgvArray](docs/module-@alexeyp0708_argv_patterns.ArgvArray.html) object - массив параметров (ArgvElemnet objects), созданный из argv параметров или командной строки. (Далее массив командной строки)
-- [ArgvPattern](docs/module-@alexeyp0708_argv_patterns.ArgvPattern.html ) object (extends ArgvArray) - массив параметров (ArgvElemnet objects) , созданный из argv параметров (array)  или командной строки. Предназначен для сравнения с ним параметров и командной строки. (Далее патерн командной строки)
-- [ArgvElement](docs/module-@alexeyp0708_argv_patterns.ArgvElement.html ) object - объект который описывает параметр командной строки. (Далее элемент командной строки)
-- [ArgvArray.prototype.add](docs/module-@alexeyp0708_argv_patterns.ArgvArray.html#add) method - добавляет новый элемент командной строки по установленным критериям, которого еще нет в массиве командной строки.
-- [ArgvArray.prototype.set](docs/module-@alexeyp0708_argv_patterns.ArgvArray.html#set) method - добавляет новый или изменяет существующий элемент командной строки.
-- [ArgvArray.prototype.get] (docs/module-@alexeyp0708_argv_patterns.ArgvArray.html#get) method - делает запрос элемента командной строки согласно установленным критериям.
-- [ArgvArray.prototype.searchElement] (docs/module-@alexeyp0708_argv_patterns.ArgvArray.html#searchElement) method - осуществляет поиск элементов командной строки удовлетворяющие критериям.
-- [ArgvArray.prototype.searchElements](docs/module-@alexeyp0708_argv_patterns.ArgvArray.html#searchElement#searchElements) method - осуществляет поиск элементов командной строки удовлетворяющие нескольким критериям командной строки.
--  [ArgvArray.prototype.toObject](docs/module-@alexeyp0708_argv_patterns.ArgvArray.html#searchElement#toObject) method - преобразует в ArgvObjecе, для удобства использования
--  [ArgvArray.prototype.toString](docs/module-@alexeyp0708_argv_patterns.ArgvArray.html#searchElement#toString) method - преобразует массив командной строки в командную строку.
--  [ArgvPattern.prototype.compare](docs/module-@alexeyp0708_argv_patterns.ArgvPattern.html#searchElement#compare) method - сравнивает массив командной строки или командную строку с патерном командной строки.
-- [ArgvPattern.prototype.toString](docs/module-@alexeyp0708_argv_patterns.ArgvPattern.html#searchElement#toString) method - преобразует патерн командной строки  из массива в командную строку. 
-
+You will use the following methods and objects in your code:
+- [ArgvArray](docs/module-@alexeyp0708_argv_patterns.ArgvArray.html) object - an array of parameters (ArgvElemnet objects) created from argv parameters or command line. (Further command line array)
+- [ArgvPattern](docs/module-@alexeyp0708_argv_patterns.ArgvPattern.html ) object (extends ArgvArray) - массив параметров (ArgvElemnet objects) , an array of parameters (ArgvElemnet objects) created from argv parameters (array) or the command line. It is intended to compare parameters and command line with it. (Further: command line pattern)
+- [ArgvElement](docs/module-@alexeyp0708_argv_patterns.ArgvElement.html ) object -an object that describes a command line parameter. (Further:command line element)
+- [ArgvArray.prototype.add](docs/module-@alexeyp0708_argv_patterns.ArgvArray.html#add) method - adds a new command line element according to the specified criteria, which is not yet in the command line array.
+- [ArgvArray.prototype.set](docs/module-@alexeyp0708_argv_patterns.ArgvArray.html#set) method - adds a new or modifies an existing command line element.
+- [ArgvArray.prototype.get] (docs/module-@alexeyp0708_argv_patterns.ArgvArray.html#get) method - adds a new or modifies an existing command line element
+- [ArgvArray.prototype.searchElement] (docs/module-@alexeyp0708_argv_patterns.ArgvArray.html#searchElement) method - searches for command line elements that match the criteria.
+- [ArgvArray.prototype.searchElements](docs/module-@alexeyp0708_argv_patterns.ArgvArray.html#searchElement#searchElements) method - searches for command line elements that match multiple command line criteria.
+-  [ArgvArray.prototype.toObject](docs/module-@alexeyp0708_argv_patterns.ArgvArray.html#searchElement#toObject) method - converts to ArgvObject, for ease of use
+-  [ArgvArray.prototype.toString](docs/module-@alexeyp0708_argv_patterns.ArgvArray.html#searchElement#toString) method -converts a command line array to a command line.
+-  [ArgvPattern.prototype.compare](docs/module-@alexeyp0708_argv_patterns.ArgvPattern.html#searchElement#compare) method - compares a command line array or command line to a command line pattern.
+- [ArgvPattern.prototype.toString](docs/module-@alexeyp0708_argv_patterns.ArgvPattern.html#searchElement#toString) method - converts the command line pattern from an array to a command line.
+- 
 #### ArgvArray array
 ```js
 
@@ -635,3 +634,54 @@ not set in the pattern.
 
 pattern.toString(); // return [/command1|command2/i command1] --option=*
 ```
+
+## To write your own help.
+
+Help description is aimed at describing the command set as a whole, and not just a specific parameter. And the goal is to concentrate a set of command descriptions in one place. So how to describe your command patterns.
+
+```js
+// 
+let pattern=new ArgvPattern('/command1|command2/i * [* default] --option=value');
+let descriptions={
+	'-':'Basic script description'
+	/*   
+if we want to describe subcommands or options for which they 
+are used differently, then we create an object, otherwise 
+just describe the parameter in the string. 
+*/
+	'command1':{
+		'-':'description "command1"'
+		'*':{
+			'-':'description "command1 *"',
+			'*':{
+				'-':'description "command1 * *"',
+				'--option':'(specific application of the option) description "command1 * * --option=value'
+			},
+			'--option':'(specific application of the option) description "command1 * --option=value"''
+			
+		}
+		'--option':'basic description "command1 * --option=value"'
+	}
+	'command2':'description "command2"'
+};
+/*
+ to activate help when comparing and generating a help 
+ message, you need to add it to the pattern.
+ */
+pattern.set('[--help -h]',{descriptions});
+pattern.set('--option2',{
+	//add '--option' description or change to "--help"
+	descriptions:{
+		'command2':{
+			'--option2':'description "command2 --option2"'
+		}
+	}
+});
+//Help will be displayed based on the command. or description of all commands
+let argv=pattern.compare('command1 --help');
+let help=argv.get('--help');
+if(help){
+	console.log(help.helpMessage);
+}
+```
+ 
