@@ -22,8 +22,6 @@ import {ArgvPattern,ArgvArray,ArgvElement} from '@alexeyp0708/argv_patterns';
 ```
 For use in projects with commonJS modules, you need to convert ES6 module to CommonJS module or use the "import" function.
 
-
-```
 ## Description
 
 This component allows you to manage command line parameters (argv parameters).  
