@@ -13,6 +13,11 @@ The documentation may not be accurate.
 Translated from Russian via google translator, so it may be difficult to understand the text
 
 ## Install
+поместить В файл конфигурации `.npmrc`
+`@alexeyp0708:registry=https://npm.pkg.github.com/`
+
+запустить
+` npm install @alexeyp0708/argv_pattern`
 
 ## Used
 
