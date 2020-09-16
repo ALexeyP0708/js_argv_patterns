@@ -36,7 +36,8 @@ For example, let's create a helper for a certain start command that launches the
 If the examples are not clear the first time, that's okay. They are presented for general presentation.
 
 Exemple
-```js
+
+```js 
 // [object ArgvPattern] instanceof ArgvArray ===true
 let pattern= new ArgvPattern('style /set|get/ --color=/blue|green|black/'); 
 let result=pattern.compare(['style','set','--color=blue']);
