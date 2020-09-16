@@ -1,12 +1,12 @@
 {
   "name": "@alexeyp0708/argv_patterns",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "cli line compare in argv patterns",
   "type": "module",
   "main": "src/export.js",
   "scripts": {
     "test": "npx qunit-m tests/qunit/test_*.js",
-    "jsdoc": "npx jsdoc src -d docs -c docs/jsdoc_conf.json"
+    "jsdoc": "npx jsdoc ./ ./README.md src -d docs -c docs/jsdoc_conf.json"
   },
   "author": "Pakhomov Alexey <alexeyp0708@gmail.com>",
   "license": "MIT",

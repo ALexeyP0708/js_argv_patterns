@@ -2,22 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: ArgvObject.js</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>ArgvObject.js - Documentation</title>
 
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
     <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
 </head>
-
 <body>
 
-<div id="main">
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
 
-    <h1 class="page-title">Source: ArgvObject.js</h1>
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.Argv.html">Argv</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.Argv.html#.compareArgvToPatterns">compareArgvToPatterns</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.Argv.html#.elementsToArray">elementsToArray</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.Argv.html#.elementsToObject">elementsToObject</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.Argv.html#.elementsToPattern">elementsToPattern</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.Argv.html#.elementsToString">elementsToString</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.Argv.html#.getHelp">getHelp</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.Argv.html#.objectToArray">objectToArray</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.Argv.html#.parse">parse</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.Argv.html#.parseCommand">parseCommand</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.Argv.html#.parseElement">parseElement</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.ArgvArray.html">ArgvArray</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.ArgvArray.html#add">add</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.ArgvArray.html#concat">concat</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.ArgvArray.html#fill">fill</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.ArgvArray.html#get">get</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.ArgvArray.html#push">push</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.ArgvArray.html#searchElement">searchElement</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.ArgvArray.html#searchElements">searchElements</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.ArgvArray.html#set">set</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.ArgvArray.html#sort">sort</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.ArgvArray.html#splice">splice</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.ArgvArray.html#toArray">toArray</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.ArgvArray.html#toElement">toElement</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.ArgvArray.html#toObject">toObject</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.ArgvArray.html#toString">toString</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.ArgvArray.html#unshift">unshift</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.ArgvElement.html">ArgvElement</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.ArgvElement.html#setParams">setParams</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.ArgvObject.html">ArgvObject</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.ArgvObject.html#toArray">toArray</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.ArgvObject.html#toString">toString</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.ArgvPattern.html">ArgvPattern</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.ArgvPattern.html#compare">compare</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.ArgvPattern.html#toString">toString</a></span></li><li class="nav-heading">Modules</li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-@alexeyp0708_argv_patterns.html">@alexeyp0708/argv_patterns</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">ArgvObject.js</h1>
+    
 
     
 
@@ -30,7 +43,7 @@
  * @module @alexeyp0708/argv_patterns
  */
 
-import {Argv,ArgvArray} from './export.js';
+import {Argv, ArgvArray} from './export.js';
 
 /**
  *  Class ArgvObject
@@ -43,28 +56,28 @@ export class ArgvObject {
      * @param {string|Array|ArgvArray|undefined} params
      * @returns {ArgvObject}
      */
-    constructor(param){
-        Object.defineProperties(this,{
-            commands:{
-                enumerable:true,
+    constructor(param) {
+        Object.defineProperties(this, {
+            commands: {
+                enumerable: true,
                 writable: true,
-                value:[]
+                value: []
             },
-            options:{
-                enumerable:true,
-                writable:true,
-                value:{}
+            options: {
+                enumerable: true,
+                writable: true,
+                value: {}
             }
         });
-        let self=this;
-        if(param instanceof ArgvArray){
+        let self = this;
+        if (param instanceof ArgvArray) {
             self = param.toObject();
-        } else if(param instanceof Array || typeof param ==='string'){
+        } else if (param instanceof Array || typeof param === 'string') {
             self = Argv.parse(param).toObject();
         }
-        if(self!==this){
-            this.commands.splice(0,0,...self.commands);
-            Object.assign(this.options,self.options);
+        if (self !== this) {
+            this.commands.splice(0, 0, ...self.commands);
+            Object.assign(this.options, self.options);
         }
     }
 
@@ -72,7 +85,7 @@ export class ArgvObject {
      * Converts this object to [array .ArgvArray]
      * @returns {ArgvArray}
      */
-    toArray(){
+    toArray() {
         return Argv.objectToArray(this);
     }
 
@@ -80,7 +93,7 @@ export class ArgvObject {
      * Converts this object to command line
      * @returns {string}
      */
-    toString(){
+    toString() {
         return Argv.elementsToString(this.toArray());
     }
 
@@ -102,33 +115,33 @@ export class ArgvObject {
      *  argv.get('--option=val');// result=>false
      * ```
      */
-    get(element,params=undefined){
-        if(!(element instanceof Argv.elementClass)){
-            element=new Argv.elementClass(element,params);
-        } else if(params instanceof Object){
+ /*   get(element, params = undefined) {
+        if (!(element instanceof Argv.elementClass)) {
+            element = new Argv.elementClass(element, params);
+        } else if (params instanceof Object) {
             element.setParams(params);
         }
-        let check=false;
-        if(element.type==='command'){
-            let order=0;
-            this.commands.forEach((value,key)=>{
+        let check = false;
+        if (element.type === 'command') {
+            let order = 0;
+            this.commands.forEach((value, key) => {
                 order++;
-                if(element.order !== undefined &amp;&amp; element.order===order){
-                    if(element.key!==undefined){
-                        if(element.key===value.key){
-                            check=this.commands[key];
+                if (element.order !== undefined &amp;&amp; element.order === order) {
+                    if (element.key !== undefined) {
+                        if (element.key === value.key) {
+                            check = this.commands[key];
                         }
                     } else {
-                        check=this.commands[key];
+                        check = this.commands[key];
                     }
                     return;
-                } else if(element.order === undefined ){
-                    if(element.key===value.key){
-                        check=this.commands[key];
+                } else if (element.order === undefined) {
+                    if (element.key === value.key) {
+                        check = this.commands[key];
                     }
                 }
             });
-        } else if(element.type==='option') {
+        } else if (element.type === 'option') {
             let keys = Object.keys(this.options);
             let ekey;
             if (element.key !== undefined &amp;&amp; keys.includes(element.key)) {
@@ -142,13 +155,13 @@ export class ArgvObject {
                         check = this.options[ekey];
                     }
                 } else {
-                    check =this.options[ekey];
+                    check = this.options[ekey];
                 }
             }
         }
         delete element.order;
         return check;
-    }
+    }*/
 
     /**
      * Sets a new parameter or overwrites the properties of the specified parameter
@@ -183,32 +196,32 @@ export class ArgvObject {
      *
      * ```
      */
-    set(element,params=undefined){
-        if(!(element instanceof Argv.elementClass)){
-            element=new Argv.elementClass(element,params);
-        } else if(params instanceof Object){
+/*    set(element, params = undefined) {
+        if (!(element instanceof Argv.elementClass)) {
+            element = new Argv.elementClass(element, params);
+        } else if (params instanceof Object) {
             element.setParams(params);
         }
-        let find=Object.assign({},element);
-        if(find.type==='command' &amp;&amp; find.order!==undefined){
-            find.key=undefined;
-        } else if(find.type==='option'){
-            find.value=undefined;
+        let find = Object.assign({}, element);
+        if (find.type === 'command' &amp;&amp; find.order !== undefined) {
+            find.key = undefined;
+        } else if (find.type === 'option') {
+            find.value = undefined;
         }
-        let check=this.get(find);
+        let check = this.get(find);
         delete element.order;
-        if(check===false){
-            if(element.type==='command'){
+        if (check === false) {
+            if (element.type === 'command') {
                 this.commands.push(element);
-            }else if(element.type==='option'){
-                let ekey=element.key??element.shortKey;
-                this.options[ekey]=element;
+            } else if (element.type === 'option') {
+                let ekey = element.key ?? element.shortKey;
+                this.options[ekey] = element;
             }
         } else {
             check.setParams(element);
         }
         return this;
-    }
+    }*/
 
 
     /**
@@ -226,30 +239,30 @@ export class ArgvObject {
      *      .add('-o=value')
      * ```
      */
-    add(element,params=undefined){
-        if(!(element instanceof Argv.elementClass)){
-            element=new Argv.elementClass(element,params);
-        } else if(params instanceof Object){
+/*    add(element, params = undefined) {
+        if (!(element instanceof Argv.elementClass)) {
+            element = new Argv.elementClass(element, params);
+        } else if (params instanceof Object) {
             element.setParams(params);
         }
-        let find=Object.assign({},element);
-        if(find.type==='command' &amp;&amp; find.order!==undefined){
-            find.key=undefined;
-        } else if(find.type==='option'){
-            find.value=undefined;
+        let find = Object.assign({}, element);
+        if (find.type === 'command' &amp;&amp; find.order !== undefined) {
+            find.key = undefined;
+        } else if (find.type === 'option') {
+            find.value = undefined;
         }
-        let check=this.get(find);
+        let check = this.get(find);
         delete element.order;
-        if(check===false){
-            if(element.type==='command'){
+        if (check === false) {
+            if (element.type === 'command') {
                 this.commands.push(element);
-            }else if(element.type==='option'){
-                let ekey=element.key??element.shortKey;
-                this.options[ekey]=element;
+            } else if (element.type === 'option') {
+                let ekey = element.key ?? element.shortKey;
+                this.options[ekey] = element;
             }
         }
         return this;
-    }
+    }*/
 }</code></pre>
         </article>
     </section>
@@ -259,17 +272,13 @@ export class ArgvObject {
 
 </div>
 
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-@alexeyp0708_argv_patterns.html">@alexeyp0708/argv_patterns</a></li></ul><h3>Classes</h3><ul><li><a href="module-@alexeyp0708_argv_patterns.Argv.html">Argv</a></li><li><a href="module-@alexeyp0708_argv_patterns.ArgvArray.html">ArgvArray</a></li><li><a href="module-@alexeyp0708_argv_patterns.ArgvElement.html">ArgvElement</a></li><li><a href="module-@alexeyp0708_argv_patterns.ArgvObject.html">ArgvObject</a></li><li><a href="module-@alexeyp0708_argv_patterns.ArgvPattern.html">ArgvPattern</a></li></ul>
-</nav>
-
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.5</a> on Fri Sep 11 2020 19:02:16 GMT+0500 (Екатеринбург, стандартное время)
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.5</a> on Wed Sep 16 2020 18:45:57 GMT+0500 (Екатеринбург, стандартное время) using the Minami theme.
 </footer>
 
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
 </body>
 </html>

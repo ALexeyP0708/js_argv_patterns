@@ -2,7 +2,7 @@
  * @module @alexeyp0708/argv_patterns
  */
 
-import {Argv,ArgvArray} from './export.js';
+import {Argv, ArgvArray} from './export.js';
 
 /**
  *  Class ArgvObject
@@ -15,28 +15,28 @@ export class ArgvObject {
      * @param {string|Array|ArgvArray|undefined} params
      * @returns {ArgvObject}
      */
-    constructor(param){
-        Object.defineProperties(this,{
-            commands:{
-                enumerable:true,
+    constructor(param) {
+        Object.defineProperties(this, {
+            commands: {
+                enumerable: true,
                 writable: true,
-                value:[]
+                value: []
             },
-            options:{
-                enumerable:true,
-                writable:true,
-                value:{}
+            options: {
+                enumerable: true,
+                writable: true,
+                value: {}
             }
         });
-        let self=this;
-        if(param instanceof ArgvArray){
+        let self = this;
+        if (param instanceof ArgvArray) {
             self = param.toObject();
-        } else if(param instanceof Array || typeof param ==='string'){
+        } else if (param instanceof Array || typeof param === 'string') {
             self = Argv.parse(param).toObject();
         }
-        if(self!==this){
-            this.commands.splice(0,0,...self.commands);
-            Object.assign(this.options,self.options);
+        if (self !== this) {
+            this.commands.splice(0, 0, ...self.commands);
+            Object.assign(this.options, self.options);
         }
     }
 
@@ -44,7 +44,7 @@ export class ArgvObject {
      * Converts this object to [array .ArgvArray]
      * @returns {ArgvArray}
      */
-    toArray(){
+    toArray() {
         return Argv.objectToArray(this);
     }
 
@@ -52,7 +52,7 @@ export class ArgvObject {
      * Converts this object to command line
      * @returns {string}
      */
-    toString(){
+    toString() {
         return Argv.elementsToString(this.toArray());
     }
 
@@ -74,33 +74,33 @@ export class ArgvObject {
      *  argv.get('--option=val');// result=>false
      * ```
      */
-    get(element,params=undefined){
-        if(!(element instanceof Argv.elementClass)){
-            element=new Argv.elementClass(element,params);
-        } else if(params instanceof Object){
+ /*   get(element, params = undefined) {
+        if (!(element instanceof Argv.elementClass)) {
+            element = new Argv.elementClass(element, params);
+        } else if (params instanceof Object) {
             element.setParams(params);
         }
-        let check=false;
-        if(element.type==='command'){
-            let order=0;
-            this.commands.forEach((value,key)=>{
+        let check = false;
+        if (element.type === 'command') {
+            let order = 0;
+            this.commands.forEach((value, key) => {
                 order++;
-                if(element.order !== undefined && element.order===order){
-                    if(element.key!==undefined){
-                        if(element.key===value.key){
-                            check=this.commands[key];
+                if (element.order !== undefined && element.order === order) {
+                    if (element.key !== undefined) {
+                        if (element.key === value.key) {
+                            check = this.commands[key];
                         }
                     } else {
-                        check=this.commands[key];
+                        check = this.commands[key];
                     }
                     return;
-                } else if(element.order === undefined ){
-                    if(element.key===value.key){
-                        check=this.commands[key];
+                } else if (element.order === undefined) {
+                    if (element.key === value.key) {
+                        check = this.commands[key];
                     }
                 }
             });
-        } else if(element.type==='option') {
+        } else if (element.type === 'option') {
             let keys = Object.keys(this.options);
             let ekey;
             if (element.key !== undefined && keys.includes(element.key)) {
@@ -114,13 +114,13 @@ export class ArgvObject {
                         check = this.options[ekey];
                     }
                 } else {
-                    check =this.options[ekey];
+                    check = this.options[ekey];
                 }
             }
         }
         delete element.order;
         return check;
-    }
+    }*/
 
     /**
      * Sets a new parameter or overwrites the properties of the specified parameter
@@ -155,32 +155,32 @@ export class ArgvObject {
      *
      * ```
      */
-    set(element,params=undefined){
-        if(!(element instanceof Argv.elementClass)){
-            element=new Argv.elementClass(element,params);
-        } else if(params instanceof Object){
+/*    set(element, params = undefined) {
+        if (!(element instanceof Argv.elementClass)) {
+            element = new Argv.elementClass(element, params);
+        } else if (params instanceof Object) {
             element.setParams(params);
         }
-        let find=Object.assign({},element);
-        if(find.type==='command' && find.order!==undefined){
-            find.key=undefined;
-        } else if(find.type==='option'){
-            find.value=undefined;
+        let find = Object.assign({}, element);
+        if (find.type === 'command' && find.order !== undefined) {
+            find.key = undefined;
+        } else if (find.type === 'option') {
+            find.value = undefined;
         }
-        let check=this.get(find);
+        let check = this.get(find);
         delete element.order;
-        if(check===false){
-            if(element.type==='command'){
+        if (check === false) {
+            if (element.type === 'command') {
                 this.commands.push(element);
-            }else if(element.type==='option'){
-                let ekey=element.key??element.shortKey;
-                this.options[ekey]=element;
+            } else if (element.type === 'option') {
+                let ekey = element.key ?? element.shortKey;
+                this.options[ekey] = element;
             }
         } else {
             check.setParams(element);
         }
         return this;
-    }
+    }*/
 
 
     /**
@@ -198,28 +198,28 @@ export class ArgvObject {
      *      .add('-o=value')
      * ```
      */
-    add(element,params=undefined){
-        if(!(element instanceof Argv.elementClass)){
-            element=new Argv.elementClass(element,params);
-        } else if(params instanceof Object){
+/*    add(element, params = undefined) {
+        if (!(element instanceof Argv.elementClass)) {
+            element = new Argv.elementClass(element, params);
+        } else if (params instanceof Object) {
             element.setParams(params);
         }
-        let find=Object.assign({},element);
-        if(find.type==='command' && find.order!==undefined){
-            find.key=undefined;
-        } else if(find.type==='option'){
-            find.value=undefined;
+        let find = Object.assign({}, element);
+        if (find.type === 'command' && find.order !== undefined) {
+            find.key = undefined;
+        } else if (find.type === 'option') {
+            find.value = undefined;
         }
-        let check=this.get(find);
+        let check = this.get(find);
         delete element.order;
-        if(check===false){
-            if(element.type==='command'){
+        if (check === false) {
+            if (element.type === 'command') {
                 this.commands.push(element);
-            }else if(element.type==='option'){
-                let ekey=element.key??element.shortKey;
-                this.options[ekey]=element;
+            } else if (element.type === 'option') {
+                let ekey = element.key ?? element.shortKey;
+                this.options[ekey] = element;
             }
         }
         return this;
-    }
+    }*/
 }

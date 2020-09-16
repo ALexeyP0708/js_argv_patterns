@@ -14,8 +14,14 @@ import {Argv} from './export.js';
  *  @prop {string} default - for an item of the command type, the default key.For an option type element, the default is.
  *  @prop {boolean} required - required element
  *  @prop {string} errorMessage - parsing error message
+ *  @prop {string} descriptions - to describe commands with this element. Used in Helper
+ *  @prop {string} order - assigned when parsing. for  commands and  determines  command order. 
+ *  Intended for informational purposes only.
+ *  @prop {string} pattern - assigned when parsing. Added when comparing command line with pattern. 
+ *  Indicates, in the result element, the pattern object that was matched.
+ *  Intended for informational purposes only.
  */
-export class ArgvElement{
+export class ArgvElement {
 
     /**
      * @param {string|object} element
@@ -23,72 +29,72 @@ export class ArgvElement{
      * If an object, then this is a set of element parameters (template for {@link ArgvElement})
      * @param {object} params
      */
-    constructor(element={},params={}){
-        Object.defineProperties(this,{
-            type:{
-                enumerable:true,
-                writable:true,
-                configurable:false,
-                value:'command',
+    constructor(element = {}, params = {}) {
+        Object.defineProperties(this, {
+            type: {
+                enumerable: true,
+                writable: true,
+                configurable: false,
+                value: 'command',
             },
-            key:{
-                enumerable:true,
-                writable:true,
-                configurable:false,
-                value:undefined,
+            key: {
+                enumerable: true,
+                writable: true,
+                configurable: false,
+                value: undefined,
             },
-            shortKey:{
-                enumerable:true,
-                writable:true,
-                configurable:false,
-                value:undefined,
+            shortKey: {
+                enumerable: true,
+                writable: true,
+                configurable: false,
+                value: undefined,
             },
-            value:{
-                enumerable:true,
-                writable:true,
-                configurable:false,
-                value:undefined,
+            value: {
+                enumerable: true,
+                writable: true,
+                configurable: false,
+                value: undefined,
             },
-            default:{
-                enumerable:true,
-                writable:true,
-                configurable:false,
-                value:undefined,
+            default: {
+                enumerable: true,
+                writable: true,
+                configurable: false,
+                value: undefined,
             },
-            required:{
-                enumerable:true,
-                writable:true,
-                configurable:false,
-                value:undefined,
+            required: {
+                enumerable: true,
+                writable: true,
+                configurable: false,
+                value: undefined,
             },
-            errorMessage:{
-                enumerable:true,
-                writable:true,
-                configurable:false,
-                value:undefined,
+            errorMessage: {
+                enumerable: true,
+                writable: true,
+                configurable: false,
+                value: undefined,
             },
-            descriptions:{
-                enumerable:true,
-                writable:true,
-                configurable:false,
-                value:undefined,
+            descriptions: {
+                enumerable: true,
+                writable: true,
+                configurable: false,
+                value: undefined,
             }
         });
-        let te=typeof element;
+        let te = typeof element;
         let self;
-        let proto=ArgvElement.prototype;
-        if(te ==='string'){
-            self= Argv.parseElement(element)[0];
-        } else if(!(element instanceof Object)){
+        let proto = ArgvElement.prototype;
+        if (te === 'string') {
+            self = Argv.parseElement(element)[0];
+        } else if (!(element instanceof Object)) {
             throw new Error('argument 1 must be [object Object] or string');
         } else {
-            self=this;
+            self = this;
             self.setParams(element);
         }
-        if(params instanceof Object){
+        if (params instanceof Object) {
             self.setParams(params);
         }
-        if(self!==this){
+        if (self !== this) {
             this.setParams(self);
         }
     }
@@ -97,12 +103,12 @@ export class ArgvElement{
      * Setting parameters for an element
      * @param {object|ArgvElement} params
      */
-    setParams(params={}){
-       // let keys=Object.keys(this);
-       for(let prop in params){
-           if( params[prop]!==undefined){// &&keys.includes(prop)
-               this[prop]=params[prop];
-           }
-       }
+    setParams(params = {}) {
+        // let keys=Object.keys(this);
+        for (let prop in params) {
+            if (params[prop] !== undefined) {// &&keys.includes(prop)
+                this[prop] = params[prop];
+            }
+        }
     }
 }
