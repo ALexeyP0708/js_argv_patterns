@@ -2,11 +2,18 @@
 Processes command lines and provides parameter objects for further script execution.
 
 Warning : component at the stage of refactoring while maintaining functionality. 
+
+## Requirements:
+
+Your browser or nodeJS must be able to support ES6 modules and ES6/ES2015 standart.
+
+## Docummentstion
+[Documentation](https://alexeyp0708.github.io/js_argv_patterns/) generated via jsdoc for the Page section.
 The documentation may not be accurate.
-Translated from Russian through google translate, so it may be difficult to understand the documentation.
+Translated from Russian via google translator, so it may be difficult to understand the text
+
 ## Install
 
-.
 ## Used
 
 This component is an ES6 module.
@@ -16,6 +23,7 @@ import {ArgvPattern,ArgvArray,ArgvElement} from '@alexeyp0708/argv_patterns';
 For use in projects with commonJS modules, you need to convert ES6 module to CommonJS module or use the "import" function.
 
 
+```
 ## Description
 
 This component allows you to manage command line parameters (argv parameters).  
@@ -187,7 +195,7 @@ OK. But why do we need to write a helper?  For starters, this is an example that
 
 ## classes for instances
 
-Instance [ArgvArray](docs/module-@alexeyp0708_argv_patterns.ArgvArray.html) class - intended for command line elements. Describes the command line.  Extends Array;
+Instance [ArgvArray](module-@alexeyp0708_argv_patterns.ArgvArray.html) class - intended for command line elements. Describes the command line.  Extends Array;
 ```js
 	new ArgvArray('command --option=value');
 	// or
@@ -207,7 +215,7 @@ Instance [ArgvArray](docs/module-@alexeyp0708_argv_patterns.ArgvArray.html) clas
 	]
 	*/
 ```
-Instance  [ArgvPattern](docs/module-@alexeyp0708_argv_patterns.ArgvPattern.html) class - is intended to create a comparison pattern. 
+Instance  [ArgvPattern](module-@alexeyp0708_argv_patterns.ArgvPattern.html) class - is intended to create a comparison pattern. 
  Extends ArgvArray;  
 ```js
 	new ArgvPattern ('/command[\d]/i --option=/[\w]+/i');
@@ -220,7 +228,7 @@ Instance  [ArgvPattern](docs/module-@alexeyp0708_argv_patterns.ArgvPattern.html)
 	*/
 ```
 
-Instance [ArgvElement](docs/module-@alexeyp0708_argv_patterns.ArgvElement.html) class - describes a command line element
+Instance [ArgvElement](module-@alexeyp0708_argv_patterns.ArgvElement.html) class - describes a command line element
 
 ```js
 new ArgvElement('command1');
@@ -239,7 +247,7 @@ ArgvElement{
 
 ```
 Other 
-Instance  [ArgvObject](docs/module-@alexeyp0708_argv_patterns.ArgvObject.html) class -  Converted ArgvArray to object. Syntactic sugar.
+Instance  [ArgvObject](module-@alexeyp0708_argv_patterns.ArgvObject.html) class -  Converted ArgvArray to object. Syntactic sugar.
 ```js
 let argv=new ArgvArray('command1 --option1 command2');
 argv=argv.toObject();
@@ -502,18 +510,18 @@ Extended syntax style options for pattern:
 ```
 ## Brief API
 You will use the following methods and objects in your code:
-- [ArgvArray](docs/module-@alexeyp0708_argv_patterns.ArgvArray.html) object - an array of parameters (ArgvElemnet objects) created from argv parameters or command line. (Further command line array)
-- [ArgvPattern](docs/module-@alexeyp0708_argv_patterns.ArgvPattern.html ) object (extends ArgvArray) - массив параметров (ArgvElemnet objects) , an array of parameters (ArgvElemnet objects) created from argv parameters (array) or the command line. It is intended to compare parameters and command line with it. (Further: command line pattern)
-- [ArgvElement](docs/module-@alexeyp0708_argv_patterns.ArgvElement.html ) object -an object that describes a command line parameter. (Further:command line element)
-- [ArgvArray.prototype.add](docs/module-@alexeyp0708_argv_patterns.ArgvArray.html#add) method - adds a new command line element according to the specified criteria, which is not yet in the command line array.
-- [ArgvArray.prototype.set](docs/module-@alexeyp0708_argv_patterns.ArgvArray.html#set) method - adds a new or modifies an existing command line element.
-- [ArgvArray.prototype.get] (docs/module-@alexeyp0708_argv_patterns.ArgvArray.html#get) method - adds a new or modifies an existing command line element
-- [ArgvArray.prototype.searchElement] (docs/module-@alexeyp0708_argv_patterns.ArgvArray.html#searchElement) method - searches for command line elements that match the criteria.
-- [ArgvArray.prototype.searchElements](docs/module-@alexeyp0708_argv_patterns.ArgvArray.html#searchElement#searchElements) method - searches for command line elements that match multiple command line criteria.
--  [ArgvArray.prototype.toObject](docs/module-@alexeyp0708_argv_patterns.ArgvArray.html#searchElement#toObject) method - converts to ArgvObject, for ease of use
--  [ArgvArray.prototype.toString](docs/module-@alexeyp0708_argv_patterns.ArgvArray.html#searchElement#toString) method -converts a command line array to a command line.
--  [ArgvPattern.prototype.compare](docs/module-@alexeyp0708_argv_patterns.ArgvPattern.html#searchElement#compare) method - compares a command line array or command line to a command line pattern.
-- [ArgvPattern.prototype.toString](docs/module-@alexeyp0708_argv_patterns.ArgvPattern.html#searchElement#toString) method - converts the command line pattern from an array to a command line.
+- [ArgvArray](module-@alexeyp0708_argv_patterns.ArgvArray.html) object - an array of parameters (ArgvElemnet objects) created from argv parameters or command line. (Further command line array)
+- [ArgvPattern](module-@alexeyp0708_argv_patterns.ArgvPattern.html ) object (extends ArgvArray) - массив параметров (ArgvElemnet objects) , an array of parameters (ArgvElemnet objects) created from argv parameters (array) or the command line. It is intended to compare parameters and command line with it. (Further: command line pattern)
+- [ArgvElement](module-@alexeyp0708_argv_patterns.ArgvElement.html ) object -an object that describes a command line parameter. (Further:command line element)
+- [ArgvArray.prototype.add](module-@alexeyp0708_argv_patterns.ArgvArray.html#add) method - adds a new command line element according to the specified criteria, which is not yet in the command line array.
+- [ArgvArray.prototype.set](module-@alexeyp0708_argv_patterns.ArgvArray.html#set) method - adds a new or modifies an existing command line element.
+- [ArgvArray.prototype.get] (module-@alexeyp0708_argv_patterns.ArgvArray.html#get) method - adds a new or modifies an existing command line element
+- [ArgvArray.prototype.searchElement] (module-@alexeyp0708_argv_patterns.ArgvArray.html#searchElement) method - searches for command line elements that match the criteria.
+- [ArgvArray.prototype.searchElements](module-@alexeyp0708_argv_patterns.ArgvArray.html#searchElement#searchElements) method - searches for command line elements that match multiple command line criteria.
+-  [ArgvArray.prototype.toObject](module-@alexeyp0708_argv_patterns.ArgvArray.html#searchElement#toObject) method - converts to ArgvObject, for ease of use
+-  [ArgvArray.prototype.toString](module-@alexeyp0708_argv_patterns.ArgvArray.html#searchElement#toString) method -converts a command line array to a command line.
+-  [ArgvPattern.prototype.compare](module-@alexeyp0708_argv_patterns.ArgvPattern.html#searchElement#compare) method - compares a command line array or command line to a command line pattern.
+- [ArgvPattern.prototype.toString](module-@alexeyp0708_argv_patterns.ArgvPattern.html#searchElement#toString) method - converts the command line pattern from an array to a command line.
 - 
 #### ArgvArray array
 ```js
