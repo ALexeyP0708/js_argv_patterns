@@ -1,6 +1,23 @@
-# Install
+# @alexeyp0708/argv_patterns
+Processes command lines and provides parameter objects for further script execution.
+
+Warning : component at the stage of refactoring while maintaining functionality. 
+The documentation may not be accurate.
+Translated from Russian through google translate, so it may be difficult to understand the documentation.
+## Install
+
+.
+## Used
+
+This component is an ES6 module.
+```js
+import {ArgvPattern,ArgvArray,ArgvElement} from '@alexeyp0708/argv_patterns';
+```
+For use in projects with commonJS modules, you need to convert ES6 module to CommonJS module or use the "import" function.
+
 
 ## Description
+
 This component allows you to manage command line parameters (argv parameters).  
 To do this, create a pattern and compare parameters of incoming requests from the console with this pattern.
 Why another semblance of Commander.js component?
