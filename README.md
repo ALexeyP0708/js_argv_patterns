@@ -1,6 +1,6 @@
 # @alexeyp0708/argv_patterns
 Processes command lines and provides parameter objects for further script execution.
-
+ 
 Warning : component at the stage of refactoring while maintaining functionality. 
 
 ## Requirements:
@@ -250,19 +250,6 @@ ArgvElement{
 */
 
 ```
-Other 
-Instance  [ArgvObject](module-@alexeyp0708_argv_patterns.ArgvObject.html) class -  Converted ArgvArray to object. Syntactic sugar.
-```js
-let argv=new ArgvArray('command1 --option1 command2');
-argv=argv.toObject();
-/*
-	argv=>argvObject{
-		commands:[ArgvElement{...}],
-		options:{
-			option1:ArgvElement{...}
-		}
-	}
-*/
 ```
  
 ## Pattern string syntax 
@@ -522,7 +509,6 @@ You will use the following methods and objects in your code:
 - [ArgvArray.prototype.get] (module-@alexeyp0708_argv_patterns.ArgvArray.html#get) method - adds a new or modifies an existing command line element
 - [ArgvArray.prototype.searchElement] (module-@alexeyp0708_argv_patterns.ArgvArray.html#searchElement) method - searches for command line elements that match the criteria.
 - [ArgvArray.prototype.searchElements](module-@alexeyp0708_argv_patterns.ArgvArray.html#searchElement#searchElements) method - searches for command line elements that match multiple command line criteria.
--  [ArgvArray.prototype.toObject](module-@alexeyp0708_argv_patterns.ArgvArray.html#searchElement#toObject) method - converts to ArgvObject, for ease of use
 -  [ArgvArray.prototype.toString](module-@alexeyp0708_argv_patterns.ArgvArray.html#searchElement#toString) method -converts a command line array to a command line.
 -  [ArgvPattern.prototype.compare](module-@alexeyp0708_argv_patterns.ArgvPattern.html#searchElement#compare) method - compares a command line array or command line to a command line pattern.
 - [ArgvPattern.prototype.toString](module-@alexeyp0708_argv_patterns.ArgvPattern.html#searchElement#toString) method - converts the command line pattern from an array to a command line.
