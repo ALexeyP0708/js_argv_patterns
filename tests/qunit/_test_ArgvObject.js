@@ -96,5 +96,91 @@ QUnit.test('test methods', function (assert) {
         assert.deepEqual(result, match, ' ArgvObject.add ');
     }
 */
+    //Argv.elementsToObject and objectToArray methods
+    /*    {
+            let match = Object.assign(new ArgvObject(), {
+                commands: [
+                    new ArgvElement({
+                        type: 'command',
+                        key: 'command1',
+                        order: 1
+                    }),
+                    new ArgvElement({
+                        type: 'command',
+                        key: 'command2',
+                        order: 2
+                    })
+                ],
+                options: {
+                    a: new ArgvElement({
+                        type: 'option',
+                        shortKey: 'a',
+                        value: true
+                    }),
+                    b: new ArgvElement({
+                        type: 'option',
+                        shortKey: 'b',
+                        value: true
+                    }),
+                    c: new ArgvElement({
+                        type: 'option',
+                        shortKey: 'c',
+                        value: '100'
+                    }),
+                    option1: new ArgvElement({
+                        type: 'option',
+                        key: 'option1',
+                        value: 'brackets test'
+                    }),
+                    option2: new ArgvElement({
+                        type: 'option',
+                        key: 'option2',
+                        value: true
+                    }),
+                }
+            });
+            let result = Argv.elementsToObject(new ArgvArray('command1  -abc=100  --option1="brackets test" --option2 command2'));
+            assert.deepEqual(result, match, 'Argv.elementsToObject method');
+            let result2 = Argv.objectToArray(result);
+            let match2 = (new ArgvArray()).concat([
+                new ArgvElement({
+                    type: 'command',
+                    key: 'command1',
+                    order: 1
+                }),
+                new ArgvElement({
+                    type: 'command',
+                    key: 'command2',
+                    order: 2
+                }),
+                new ArgvElement({
+                    type: 'option',
+                    shortKey: 'a',
+                    value: true
+                }),
+                new ArgvElement({
+                    type: 'option',
+                    shortKey: 'b',
+                    value: true
+                }),
+                new ArgvElement({
+                    type: 'option',
+                    shortKey: 'c',
+                    value: '100'
+                }),
+                new ArgvElement({
+                    type: 'option',
+                    key: 'option1',
+                    value: 'brackets test'
+                }),
+                new ArgvElement({
+                    type: 'option',
+                    key: 'option2',
+                    value: true
+                })
+    
+            ]);
+            assert.deepEqual(result2, match2, 'Argv.objectToArray method');
+        }*/
 
 });

@@ -1,7 +1,7 @@
 /**
  * @module @alexeyp0708/argv_patterns
  */
-import {Argv} from './export.js';
+import {ArgvElement} from './export.js';
 
 /**
  *  Class ArgvArray create array containing [object .ArgvElement]
@@ -9,7 +9,6 @@ import {Argv} from './export.js';
  */
 
 export class ArgvArray extends Array {
-
     /**
      * Creates an array of [object .ArgvElement] elements based on the command line, or an array of Argv parameters
      * @param {string|object} args args[0] string|Array - command line or Array from argv params, or arvs - argv array
@@ -35,7 +34,7 @@ export class ArgvArray extends Array {
     constructor(...args) {
         if (args.length === 1) {
             if (typeof args[0] === 'string') {
-                let first = Argv.parseCommand(args[0]);
+                let first = ArgvArray.parseCommand(args[0]);
                 args.splice(0, 1, ...first);
             } else if (args[0] instanceof Array) {
                 args.splice(0, 1, ...args[0]);
@@ -43,7 +42,10 @@ export class ArgvArray extends Array {
         }
         if (args.length > 1 || args.length === 1 && typeof args[0] !== 'number') {
             try {
-                args = Argv.parse(args);
+                args = ArgvArray.parse(args);
+                for(let key=0; key<args.length;key++){
+                    args[key]=new ArgvArray.elementClass(args[key]);
+                }
             } catch (e) {
                 if (/^Bad parameters:/.test(e.message)) {
                     let message = e.message +
@@ -88,16 +90,16 @@ export class ArgvArray extends Array {
      * }
      * ```
      */
-    toObject() {
-        return Argv.elementsToObject(this);
-    }
+    /*toObject() {
+        return ArgvArray.elementsToObject(this);
+    }*/
 
     /**
      * converts ArgvArray to Array
-     * @returns {string}
+     * @returns {string[]}
      */
     toArray() {
-        return Argv.elementsToArray(this);
+        return ArgvArray.elementsToArray(this);
     }
 
     /**
@@ -110,7 +112,7 @@ export class ArgvArray extends Array {
      * //'command --option -o=value'
      */
     toString() {
-        return Argv.elementsToString(this);
+        return ArgvArray.elementsToString(this);
     }
 
     /**
@@ -146,8 +148,8 @@ export class ArgvArray extends Array {
      * result=argv.searchElement({type:'option',key:/option[\d]/,shortKey:/[ab]/,value:/^value[\d]$/},true);// [argv[3]]
      */
     searchElement(element, isFirst = false) {
-        if (!(element instanceof Argv.elementClass)) {
-            element = new Argv.elementClass(element);
+        if (!(element instanceof ArgvArray.elementClass)) {
+            element = new ArgvArray.elementClass(element);
         }
         let order = 0, check = false;
         let result = new ArgvArray();
@@ -240,8 +242,8 @@ export class ArgvArray extends Array {
     searchElements(elements = [], isFirst = false, isCommand = false) {
         let results = [];
         elements.forEach((element, key) => {
-            if (!(element instanceof Argv.elementClass)) {
-                element = new Argv.elementClass(element);
+            if (!(element instanceof ArgvArray.elementClass)) {
+                element = new ArgvArray.elementClass(element);
             }
             let result = this.searchElement(element, isFirst);
             if (result.length === 0) {
@@ -284,8 +286,8 @@ export class ArgvArray extends Array {
      *  argv.get('--option=val');// result=>false
      */
     get(element, params = undefined) {
-        if (!(element instanceof Argv.elementClass)) {
-            element = new Argv.elementClass(element, params);
+        if (!(element instanceof ArgvArray.elementClass)) {
+            element = new ArgvArray.elementClass(element, params);
         } else if (params instanceof Object) {
             element.setParams(params);
         }
@@ -340,8 +342,8 @@ export class ArgvArray extends Array {
      *      .set('-o=value'); // search for option "o" and set value
      */
     set(element, params = undefined) {
-        if (!(element instanceof Argv.elementClass)) {
-            element = new Argv.elementClass(element, params);
+        if (!(element instanceof ArgvArray.elementClass)) {
+            element = new ArgvArray.elementClass(element, params);
         } else if (params instanceof Object) {
             element.setParams(params);
         }
@@ -387,8 +389,8 @@ export class ArgvArray extends Array {
      *
      */
     add(element, params = undefined) {
-        if (!(element instanceof Argv.elementClass)) {
-            element = new Argv.elementClass(element, params);
+        if (!(element instanceof ArgvArray.elementClass)) {
+            element = new ArgvArray.elementClass(element, params);
         } else if (params instanceof Object) {
             element.setParams(params);
         }
@@ -415,8 +417,8 @@ export class ArgvArray extends Array {
      * let result= argv.toElement('command --option -o=value'); //[object ArgvElement]
      */
     toElement(element) {
-        if (!(element instanceof Argv.elementClass)) {
-            element = new Argv.elementClass(element);
+        if (!(element instanceof ArgvArray.elementClass)) {
+            element = new ArgvArray.elementClass(element);
         }
         return element;
     }
@@ -503,4 +505,198 @@ export class ArgvArray extends Array {
         }
         return super.sort(call);
     }
+
+    /**
+     * Command line parse. Breaks the command line into argv parameters.
+     * @param {string} str Command line.
+     * Warning: quotes ( " and ') inside quotes are not recognized when parsing a string.
+     * @returns {string[]}  Returns an argv-style array of parameters
+     * @example
+     * Argv.parseCommand('command1 --option -o=value "command2" --option2="value string"');
+     * //result
+     * [
+     *      'command1',
+     *      '--option',
+     *      '-o=value',
+     *      'command2',
+     *      '--option2=value string'
+     * ];
+     */
+    static parseCommand(str) {
+        str = str.replace(/[\s]+\=[\s]+/g, '=');
+        str = str.replace(/[\s]{2,}/g, ' ');
+        let pull = [];
+        let space = '@@';
+        str = str.replace(/(\[[\s\S]*?\])|[\s]*([\=|:])[\s]*|"([\s\S]*?)"|([\s]+)/g, function (m, p1, p2, p3, p4) {
+            if (p1 !== undefined) {
+                pull.push(p1);
+                return '@@pull_' + (pull.length - 1);
+            }
+            if (p2 !== undefined) {
+                return p2;
+            }
+            if (p3 !== undefined) {
+                pull.push(p3);
+                return '@@pull_' + (pull.length - 1);
+            }
+            if (p4 !== undefined) {
+                return space;
+            }
+        });
+        str = str.replace(/@@pull_([\d]+)/g, function (m, p1) {
+            p1 = Number(p1);
+            if (pull[p1] !== undefined) {
+                return pull[p1];
+            }
+            return m;
+        });
+        str = str.split(space);
+        return str;
+    }
+
+
+    /**
+     * Parses the command line or argv parameter array and returns an [array .ArgvArray].
+     * @param {string[]|array[]|string} argv  Array type- argv parameters set. String type -parameters command line.
+     * If an array element is an array, then this array is considered to be a set of command parameters and all its elements will be embedded in the existing array set.
+     * Warning: quotes ( " and ') inside quotes are not recognized when parsing a string.
+     * @returns {Array}   A collection of [object .ArgvElement]
+     * @throws
+     * Error: Bad parameters - syntactically bad parameter or poorly constructed command line
+     */
+    static parse(argv) {
+        if (typeof argv === 'string') {
+            argv = this.parseCommand(argv);
+        }
+        let result =[];// new ArgvArray();
+        let errors = [];
+        let order = 0;
+        for (let key = 0; key < argv.length; key++) {
+            let arg = argv[key];
+            if (arg instanceof Array) {
+                argv.splice(key, 1, ...arg);
+                key--;
+                continue;
+            }
+            if (typeof arg === 'string') {
+                try {
+                    arg = ArgvElement.parseElement(arg);
+                    arg.forEach((value) => {
+                        if (value.type === 'command') {
+                            order++;
+                            value.order=order;
+                        }
+                        result.push(value);
+                    });
+                } catch (e) {
+                    errors.push(e.message);
+                }
+            } else {
+                if (arg.type === 'command' && arg.order === undefined) {
+                    order++;
+                    arg.order={
+                        enumerable: true,
+                        value: order
+                    };
+                }
+                result.push(arg);
+            }
+        }
+        if (errors.length > 0) {
+            throw new Error("Bad parameters:\n" + errors.join(" "));
+        }
+        return result;
+    }
+    
+    /**
+     * Converting [object .ArgvElement] elements from [array .ArgvArray] to string parameters  array
+     * @param {ArgvArray} argv
+     * @returns {string[]}
+     * @throws
+     * Error: Bad argument - Invalid argument
+     */
+    static elementsToArray(argv) {
+        let result = [];
+        if (!(argv instanceof ArgvArray)) {
+            throw new Error('Bad argument. Must be [object ArgvArray]');
+        }
+        for (let param of argv) {
+            if (param.type === 'command') {
+                if (/[\s]/.test(param.key)) {
+                    result.push(`"${param.key}"`);
+                } else {
+                    result.push(param.key);
+                }
+            } else {
+                let value = param.value;
+
+                let key;
+                let prefix = '';
+                if (param.key !== undefined) {
+                    key = param.key;
+                    prefix = '--';
+                } else if (param.shortKey !== undefined) {
+                    key = param.shortKey;
+                    prefix = '-';
+                }
+                let str = prefix + key;
+                if (typeof value !== "boolean") {
+                    str += '="' + value + '"';
+                } else if (value === false) {
+                    str = undefined;
+                }
+                if (str !== undefined) {
+                    result.push(str);
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Converting [object .ArgvElement]  elements from [array .ArgvArray] to command line
+     * @param {ArgvArray} argv
+     * @returns {string}
+     * @throws
+     * Error: Bad argument - Invalid argument
+     */
+    static elementsToString(argv) {
+        if (!(argv instanceof ArgvArray)) {
+            throw new Error('Bad argument. Must be [object ArgvArray]');
+        }
+        return this.elementsToArray(argv).join(' ');
+    }
+}
+
+/**
+ * Using this property, you can replace the class [object .ArgvElement] the advanced class
+ * If ArgvArray.elementClass = null, then  [class .ArgvElement] will be set by default
+ * @type {ArgvElement}
+ * @throws
+ * Error: Class does not belong to [class .ArgvElement]
+ * @example
+ * class ExtArgvElement extends ArgvElement {}
+ * ArgvArray.elementClass=ExtArgvElement;
+ * let argv=new ArgvArray('command --option');
+ * argv[0] instanceof ExtArgvElement // true
+ */
+ArgvArray.elementClass = ArgvElement;
+{
+    let element = ArgvElement;
+    Object.defineProperty(ArgvArray, 'elementClass', {
+        enumerable: false,
+        configurable: true,
+        get() {
+            return element;
+        },
+        set(v) {
+            if (typeof v === 'function' && ArgvElement.isPrototypeOf(v)) {
+                element = v;
+            } else if (v === null) {
+                element = ArgvElement;
+            } else {
+                throw new Error('The value does not belong to the ArgvElement class');
+            }
+        }
+    });
 }

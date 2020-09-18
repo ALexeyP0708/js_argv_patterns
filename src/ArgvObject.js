@@ -2,7 +2,7 @@
  * @module @alexeyp0708/argv_patterns
  */
 
-import {Argv, ArgvArray} from './export.js';
+import {ArgvArray} from './export.js';
 
 /**
  *  Class ArgvObject
@@ -32,7 +32,7 @@ export class ArgvObject {
         if (param instanceof ArgvArray) {
             self = param.toObject();
         } else if (param instanceof Array || typeof param === 'string') {
-            self = Argv.parse(param).toObject();
+            self = new ArgvArray(param).toObject();
         }
         if (self !== this) {
             this.commands.splice(0, 0, ...self.commands);
@@ -222,4 +222,57 @@ export class ArgvObject {
         }
         return this;
     }*/
+
+    /**
+     * Converting [array .ArgvArray] to [object .ArgvObject]
+     * @param {ArgvArray} argv
+     * @returns {ArgvObject}
+     */
+    static elementsToObject(argv) {
+        let result = new ArgvObject();
+        if (!(argv instanceof ArgvArray)) {
+            throw new Error('Bad argument. Must be [object ArgvArray]');
+        }
+        for (let param of argv) {
+            if (param.type === 'command') {
+                result.commands.push(param);
+            } else if (param.type === 'option') {
+                if (param.key !== undefined) {
+                    result.options[param.key] = param;
+                } else if (param.shortKey !== undefined) {
+                    result.options[param.shortKey] = param;
+                }
+            }
+        }
+        result.commands.sort((a, b) => {
+            return a.order - b.order;
+        });
+        return result;
+    }
+
+
+    /**
+     * Converting [object .ArgvObject] to [array .ArgvArray]
+     * @param {ArgvObject} argv
+     * @returns {ArgvArray}
+     * @throws
+     * Error: Bad argument - Invalid argument.
+     */
+    static objectToArray(argv) {
+        if (!argv instanceof ArgvObject) {
+            throw new Error('Bad argument. Must be [object ArgvObject] ');
+        }
+        let result = new ArgvArray();
+        for (let command of argv.commands) {
+            result.push(command);
+        }
+        for (let key in argv.options) {
+            let option = argv.options[key];
+            let check = false;
+            if (!result.includes(option)) {
+                result.push(option);
+            }
+        }
+        return result;
+    }
 }

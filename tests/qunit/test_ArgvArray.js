@@ -1,8 +1,140 @@
-import {ArgvArray, ArgvElement, ArgvObject} from "../../src/export.js";
+import {ArgvArray, ArgvElement} from "../../src/export.js";
 
 QUnit.module('Test ArgArray class');
 QUnit.test('test methods', function (assert) {
 
+    {
+        //ArgArray.parseCommand method
+        {
+            let match = [
+                'command1',
+                '[-o --option value string]',
+                '-abc=100',
+                '--option1=brackets test',
+                '--option2',
+                'command2'
+            ];
+            let result = ArgvArray.parseCommand('command1 [-o --option value string]  -abc=100  --option1="brackets test" --option2 command2');
+
+            assert.propEqual(result, match, 'ArgArray.parseCommand method');
+        }
+
+    }
+
+
+    // ArgvArray.parse method
+    {
+        let match = [
+            {
+                type: 'command',
+                key: 'command1',
+                order: 1
+            },
+            {
+                type: 'option',
+                shortKey: 'a',
+                value: true
+            },
+            {
+                type: 'option',
+                shortKey: 'b',
+                value: true
+            },
+            {
+                type: 'option',
+                shortKey: 'c',
+                value: '100'
+            },
+            {
+                type: 'option',
+                key: 'option1',
+                value: 'brackets test'
+            },
+            {
+                type: 'option',
+                key: 'option2',
+                value: true
+            },
+            {
+                type: 'command',
+                key: 'command2',
+                order: 2
+            }
+        ];
+        let result = ArgvArray.parse('command1  -abc=100  --option1="brackets test" --option2 command2');
+        assert.deepEqual(result, match, 'ArgvArray.parse method');
+        let result2 = ArgvArray.parse(['command1', '-abc=100', '--option1=brackets test', '--option2', 'command2']);
+        assert.deepEqual(result2, match, 'ArgvArray.parse method 2');
+    }
+
+    // ArgvArray.parse method 2 -identical commands
+    {
+        let match = [
+            {
+                type: 'command',
+                key: 'command1',
+                order: 1
+            },
+            {
+                type: 'option',
+                shortKey: 'a',
+                value: true
+            },
+            {
+                type: 'command',
+                key: 'command1',
+                order: 2
+            },
+            {
+                type: 'command',
+                key: 'command1',
+                order: 3
+            }
+        ];
+        let result = ArgvArray.parse('command1  -a  command1 command1');
+        assert.deepEqual(result, match, 'ArgvArray.parse method -identical commands');
+    }
+    
+    // elementsToArray method
+    {
+        let argv=new ArgvArray('command1  -a  command1 command1');
+        argv=argv.toArray();
+        console.log();
+        let match=[
+                "command1",
+                "-a",
+                "command1",
+                "command1"
+            ];
+        assert.propEqual(argv, match, 'ArgvArray.parse method -identical commands');
+    }
+    //ArgvArray.elementsToString method
+    {
+        let match = 'command1 -a -c="100" --option1="brackets test" --option2 command2';
+        let params = new ArgvArray('command1  -ab=false -c=100  --option1="brackets test" --option2 command2');
+        let result = ArgvArray.elementsToString(params);
+        assert.equal(result, match, 'ArgvArray.elementsToString method');
+    }
+
+    // ArgvArray.elementClass get/set
+    {
+        class A extends ArgvElement {
+        };
+        ArgvArray.elementClass = A;
+        assert.equal(ArgvArray.elementClass, A, 'ArgvArray.elementClass set/get');
+        ArgvArray.elementClass = null;
+        assert.equal(ArgvArray.elementClass, ArgvElement, 'ArgvArray.elementClass - reset');
+    }
+
+    // ArgvArray.elementClass
+    {
+        assert.throws(function () {
+            ArgvArray.elementClass = class A {
+            };
+        }, function (e) {
+            return e.message === "The value does not belong to the ArgvElement class";
+        }, 'ArgvArray.elementClass error');
+    }
     // ArgvArray.constructor method
     {
         let match = [
@@ -167,11 +299,11 @@ QUnit.test('test methods', function (assert) {
     }
 
     // ArgvArray.toObject method
-    {
+/*    {
         let match = new ArgvObject(['command', 'command2', '--option', '-o=value']);
         let result = new ArgvArray(['command', '--option', '-o=value', 'command2']);
         assert.deepEqual(result.toObject(), match, 'ArgvArray.toObject method');
-    }
+    }*/
 
     // Argv.push
     {
