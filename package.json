@@ -1,6 +1,6 @@
 {
   "name": "@alexeyp0708/argv_patterns",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "cli line compare in argv patterns",
   "type": "module",
   "main": "src/export.js",
