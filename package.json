@@ -6,7 +6,7 @@
   "main": "src/export.js",
   "scripts": {
     "test": "npx qunit-m tests/qunit/test_*.js",
-    "jsdoc": "npx jsdoc ./ ./README.md src -d docs -c docs/jsdoc_conf.json"
+    "jsdoc": "npx jsdoc ./src ./README.md src -d docs -c docs/jsdoc_conf.json"
   },
   "author": "Pakhomov Alexey <alexeyp0708@gmail.com>",
   "license": "MIT",
